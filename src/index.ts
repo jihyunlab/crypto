@@ -1,4 +1,5 @@
-import { createHash, createHmac, HASH, HMAC } from './cryptos/hash';
+import { create as createHash, HASH } from './cryptos/hash/hash.factory';
+import { create as createHmac, HMAC } from './cryptos/hmac/hmac.factory';
 
 export const Hash = {
   create: (hash: HASH) => {

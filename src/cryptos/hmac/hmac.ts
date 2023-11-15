@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-export class ShaHmac {
+export class Hmac {
   private hmac: crypto.Hmac;
 
   constructor(algorithm: string, key: Buffer) {

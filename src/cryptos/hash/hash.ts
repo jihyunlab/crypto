@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-export class ShaHash {
+export class Hash {
   private hash: crypto.Hash;
 
   constructor(algorithm: string) {
