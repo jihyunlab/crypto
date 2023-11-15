@@ -1,0 +1,27 @@
+{
+  "name": "@jihyunlab/crypto",
+  "version": "1.0.3",
+  "description": "JihyunLab Crypto.",
+  "license": "MIT",
+  "author": "JihyunLab <jihyunlab@gmail.com> (https://github.com/jihyunlab)",
+  "homepage": "https://github.com/jihyunlab/crypto",
+  "repository": "https://github.com/jihyunlab/crypto",
+  "bugs": "http://github.com/jihyunlab/crypto/issues",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "start": "tsc --build && node dist/index.js",
+    "clean": "tsc --build --clean"
+  },
+  "keywords": [
+    "jihyunlab",
+    "crypto"
+  ],
+  "devDependencies": {
+    "@jihyunlab/eslint-config": "^1.0.4",
+    "@jihyunlab/prettier-config": "^1.0.3",
+    "@types/node": "^20.9.0",
+    "typescript": "^5.2.2"
+  }
+}
