@@ -15,9 +15,9 @@ export const Hmac = {
 };
 
 export const Crypto = {
-  create: (crypto: CRYPTO, password: string | Buffer, salt: string | Buffer, iv?: Buffer) => {
+  create: (crypto: CRYPTO, password: string | Buffer, salt: string | Buffer, iv?: string | Buffer | null) => {
     return createCrypto(crypto, password, salt, iv);
   },
 };
 
-export { HASH, HMAC };
+export { HASH, HMAC, CRYPTO };
