@@ -12,7 +12,7 @@ export const HMAC = {
 } as const;
 export type HMAC = (typeof HMAC)[keyof typeof HMAC];
 
-export const create = (hmac: HMAC, key: Buffer) => {
+export const create = (hmac: HMAC, key: string | Buffer) => {
   switch (hmac) {
     case HMAC.SHA_224:
       return new Hmac('sha224', key);

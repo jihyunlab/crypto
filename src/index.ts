@@ -10,7 +10,7 @@ export const Hash = {
 };
 
 export const Hmac = {
-  create: (hmac: HMAC, key: Buffer) => {
+  create: (hmac: HMAC, key: string | Buffer) => {
     return createHmac(hmac, key);
   },
 };

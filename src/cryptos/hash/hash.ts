@@ -7,8 +7,8 @@ export class Hash {
     this.hash = crypto.createHash(algorithm);
   }
 
-  update(buffer: Buffer) {
-    this.hash.update(buffer);
+  update(text: string | Buffer) {
+    this.hash.update(text);
     return this;
   }
 

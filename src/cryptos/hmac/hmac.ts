@@ -3,12 +3,12 @@ import * as crypto from 'crypto';
 export class Hmac {
   private hmac: crypto.Hmac;
 
-  constructor(algorithm: string, key: Buffer) {
+  constructor(algorithm: string, key: string | Buffer) {
     this.hmac = crypto.createHmac(algorithm, key);
   }
 
-  update(buffer: Buffer) {
-    this.hmac.update(buffer);
+  update(text: string | Buffer) {
+    this.hmac.update(text);
     return this;
   }
 
