@@ -16,14 +16,14 @@ export const Hmac = {
 };
 
 export const Crypto = {
-  create: (crypto: CRYPTO, password: string | Buffer, salt: string | Buffer, iv?: string | Buffer | null) => {
-    return createCrypto(crypto, password, salt, iv);
+  create: (crypto: CRYPTO, password: string | Buffer, salt: string | Buffer) => {
+    return createCrypto(crypto, password, salt);
   },
 };
 
 export const Aead = {
-  create: (aead: AEAD, key: string | Buffer, nonce?: string | Buffer, authTagLength?: number, aad?: Buffer) => {
-    return createAead(aead, key, nonce, authTagLength, aad);
+  create: (aead: AEAD, key: string | Buffer, authTagLength?: number, aad?: Buffer) => {
+    return createAead(aead, key, authTagLength, aad);
   },
 };
 

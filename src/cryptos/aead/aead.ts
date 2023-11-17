@@ -3,14 +3,12 @@ import * as crypto from 'crypto';
 export class Aead {
   private algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes;
   private key: string | Buffer;
-  private nonce: string | Buffer;
   private authTagLength?: number;
   private aad?: Buffer;
 
   constructor(
     algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes,
     key: string | Buffer,
-    nonce?: string | Buffer,
     authTagLength?: number,
     aad?: Buffer
   ) {
@@ -18,76 +16,81 @@ export class Aead {
     this.key = key;
     this.authTagLength = authTagLength;
     this.aad = aad;
+  }
 
-    if (nonce) {
-      this.nonce = nonce;
-    } else {
-      const info = crypto.getCipherInfo(this.algorithm);
+  nonce(nonce?: string | Buffer) {
+    const info = crypto.getCipherInfo(this.algorithm);
+    let generated: string | Buffer;
 
+    if (!nonce) {
       if (info && info.ivLength !== undefined && info.ivLength > 0) {
-        this.nonce = crypto.randomBytes(info.ivLength);
+        generated = crypto.randomBytes(info.ivLength);
       } else {
         throw new Error('nonce cannot be generated automatically.');
       }
+
+      return generated;
     }
-  }
 
-  encrypt = {
-    binary(
-      text: string,
-      inputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) {
-      if (!inputEncoding) {
-        inputEncoding = 'utf-8';
-      }
+    generated = nonce;
 
-      return this.string(text, inputEncoding, 'binary');
-    },
-    hex(
-      text: string,
-      inputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) {
-      if (!inputEncoding) {
-        inputEncoding = 'utf-8';
-      }
-
-      return this.string(text, inputEncoding, 'hex');
-    },
-    base64(
-      text: string,
-      inputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) {
-      if (!inputEncoding) {
-        inputEncoding = 'utf-8';
-      }
-
-      return this.string(text, inputEncoding, 'base64');
-    },
-    uint8Array(text: Buffer) {
-      const buffer = this.buffer(text);
-      return { text: new Uint8Array(buffer.text), nonce: buffer.nonce };
-    },
-    string: (
-      text: string,
-      inputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1',
-      outputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) => {
-      const info = crypto.getCipherInfo(this.algorithm);
-
-      let nonce = this.nonce;
-
-      if (nonce && info) {
-        if (info.ivLength !== undefined && info.ivLength > 0 && nonce.length !== info.ivLength) {
-          if (typeof nonce === 'string') {
-            nonce = nonce + '0'.repeat(info.ivLength);
-            nonce = nonce.slice(0, info.ivLength);
-          } else {
+    if (info) {
+      if (!info.ivLength) {
+        throw new Error('nonce length information could not be retrieved.');
+      } else {
+        if (typeof nonce === 'string') {
+          if (info.ivLength !== Buffer.from(nonce, 'utf8').length) {
             const buffer = Buffer.alloc(info.ivLength);
-            nonce = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, info.ivLength);
+            generated = Buffer.concat([Buffer.from(nonce, 'utf8'), buffer]).subarray(0, info.ivLength);
+            generated = generated.toString('utf8');
+          }
+        } else {
+          if (info.ivLength !== nonce.length) {
+            const buffer = Buffer.alloc(info.ivLength);
+            generated = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, info.ivLength);
           }
         }
       }
+    }
 
+    return generated;
+  }
+
+  encrypt = {
+    binary(text: string, nonce: string | Buffer, inputEncoding?: crypto.Encoding) {
+      if (!inputEncoding) {
+        inputEncoding = 'utf8';
+      }
+
+      const string = this.string(text, nonce, inputEncoding, 'binary');
+      return { text: string.text, tag: string.tag };
+    },
+    hex(text: string, nonce: string | Buffer, inputEncoding?: crypto.Encoding) {
+      if (!inputEncoding) {
+        inputEncoding = 'utf8';
+      }
+
+      const string = this.string(text, nonce, inputEncoding, 'hex');
+      return { text: string.text, tag: string.tag };
+    },
+    base64(text: string, nonce: string | Buffer, inputEncoding?: crypto.Encoding) {
+      if (!inputEncoding) {
+        inputEncoding = 'utf8';
+      }
+
+      const string = this.string(text, nonce, inputEncoding, 'base64');
+      return { text: string.text, tag: string.tag };
+    },
+    uint8Array(text: Buffer, nonce: string | Buffer) {
+      const buffer = this.buffer(text, nonce);
+      return { text: new Uint8Array(buffer.text), tag: buffer.tag };
+    },
+    string: (
+      text: string,
+      nonce: string | Buffer,
+      inputEncoding?: crypto.Encoding,
+      outputEncoding?: crypto.Encoding
+    ) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
       if (this.algorithm as crypto.CipherCCMTypes) {
@@ -115,7 +118,7 @@ export class Aead {
       }
 
       if (!inputEncoding) {
-        inputEncoding = 'utf-8';
+        inputEncoding = 'utf8';
       }
 
       if (!outputEncoding) {
@@ -127,25 +130,9 @@ export class Aead {
 
       const authTag = cipher.getAuthTag();
 
-      return { text: encrypted, nonce: this.nonce, tag: authTag };
+      return { text: encrypted, tag: authTag };
     },
-    buffer: (text: Buffer) => {
-      const info = crypto.getCipherInfo(this.algorithm);
-
-      let nonce = this.nonce;
-
-      if (nonce && info) {
-        if (info.ivLength !== undefined && info.ivLength > 0 && nonce.length !== info.ivLength) {
-          if (typeof nonce === 'string') {
-            nonce = nonce + '0'.repeat(info.ivLength);
-            nonce = nonce.slice(0, info.ivLength);
-          } else {
-            const buffer = Buffer.alloc(info.ivLength);
-            nonce = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, info.ivLength);
-          }
-        }
-      }
-
+    buffer: (text: Buffer, nonce: string | Buffer) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
       if (this.algorithm as crypto.CipherCCMTypes) {
@@ -177,58 +164,31 @@ export class Aead {
 
       const authTag = cipher.getAuthTag();
 
-      return { text: encrypted, nonce: this.nonce, tag: authTag };
+      return { text: encrypted, tag: authTag };
     },
   };
 
   decrypt = {
-    binary(
-      text: string,
-      tag: Buffer,
-      outputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) {
-      return this.string(text, tag, 'binary', outputEncoding);
+    binary(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
+      return this.string(text, tag, nonce, 'binary', outputEncoding);
     },
-    hex(
-      text: string,
-      tag: Buffer,
-      outputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) {
-      return this.string(text, tag, 'hex', outputEncoding);
+    hex(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
+      return this.string(text, tag, nonce, 'hex', outputEncoding);
     },
-    base64(
-      text: string,
-      tag: Buffer,
-      outputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
-    ) {
-      return this.string(text, tag, 'base64', outputEncoding);
+    base64(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
+      return this.string(text, tag, nonce, 'base64', outputEncoding);
     },
-    uint8Array(text: Buffer, tag: Buffer) {
-      const buffer = this.buffer(text, tag);
+    uint8Array(text: Buffer, tag: Buffer, nonce: string | Buffer) {
+      const buffer = this.buffer(text, tag, nonce);
       return new Uint8Array(buffer);
     },
     string: (
       text: string,
       tag: Buffer,
-      inputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1',
-      outputEncoding?: 'base64' | 'base64url' | 'hex' | 'binary' | 'utf8' | 'utf-8' | 'utf16le' | 'utf-16le' | 'latin1'
+      nonce: string | Buffer,
+      inputEncoding?: crypto.Encoding,
+      outputEncoding?: crypto.Encoding
     ) => {
-      const info = crypto.getCipherInfo(this.algorithm);
-
-      let nonce = this.nonce;
-
-      if (nonce && info) {
-        if (info.ivLength !== undefined && info.ivLength > 0 && nonce.length !== info.ivLength) {
-          if (typeof nonce === 'string') {
-            nonce = nonce + '0'.repeat(info.ivLength);
-            nonce = nonce.slice(0, info.ivLength);
-          } else {
-            const buffer = Buffer.alloc(info.ivLength);
-            nonce = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, info.ivLength);
-          }
-        }
-      }
-
       let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
 
       if (this.algorithm as crypto.CipherCCMTypes) {
@@ -262,7 +222,7 @@ export class Aead {
       }
 
       if (!outputEncoding) {
-        outputEncoding = 'utf-8';
+        outputEncoding = 'utf8';
       }
 
       let decrypted = decipher.update(text, inputEncoding, outputEncoding);
@@ -270,23 +230,7 @@ export class Aead {
 
       return decrypted;
     },
-    buffer: (text: Buffer, tag: Buffer) => {
-      const info = crypto.getCipherInfo(this.algorithm);
-
-      let nonce = this.nonce;
-
-      if (nonce && info) {
-        if (info.ivLength !== undefined && info.ivLength > 0 && nonce.length !== info.ivLength) {
-          if (typeof nonce === 'string') {
-            nonce = nonce + '0'.repeat(info.ivLength);
-            nonce = nonce.slice(0, info.ivLength);
-          } else {
-            const buffer = Buffer.alloc(info.ivLength);
-            nonce = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, info.ivLength);
-          }
-        }
-      }
-
+    buffer: (text: Buffer, tag: Buffer, nonce: string | Buffer) => {
       let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
 
       if (this.algorithm as crypto.CipherCCMTypes) {
