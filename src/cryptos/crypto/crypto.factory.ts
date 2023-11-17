@@ -19,6 +19,9 @@ export const CRYPTO = {
   AES_128_OFB: 'AES-128-OFB',
   AES_192_OFB: 'AES-192-OFB',
   AES_256_OFB: 'AES-256-OFB',
+  AES_128_ECB: 'AES-128-ECB',
+  AES_192_ECB: 'AES-192-ECB',
+  AES_256_ECB: 'AES-256-ECB',
 } as const;
 export type CRYPTO = (typeof CRYPTO)[keyof typeof CRYPTO];
 
@@ -65,5 +68,11 @@ export const create = (
       return new Crypto('aes-192-ofb', password, salt, 192 / 8, iv);
     case CRYPTO.AES_256_OFB:
       return new Crypto('aes-256-ofb', password, salt, 256 / 8, iv);
+    case CRYPTO.AES_128_ECB:
+      return new Crypto('aes-128-ecb', password, salt, 128 / 8, iv);
+    case CRYPTO.AES_192_ECB:
+      return new Crypto('aes-192-ecb', password, salt, 192 / 8, iv);
+    case CRYPTO.AES_256_ECB:
+      return new Crypto('aes-256-ecb', password, salt, 256 / 8, iv);
   }
 };
