@@ -13,7 +13,7 @@ export class Crypto {
     this.keylen = keylen;
   }
 
-  iv(iv?: string | Buffer) {
+  generateIv(iv?: string | Buffer) {
     const info = crypto.getCipherInfo(this.algorithm);
     let generated: string | Buffer | null;
 
@@ -120,9 +120,9 @@ export class Crypto {
     base64(text: string, iv: string | Buffer | null, outputEncoding?: crypto.Encoding) {
       return this.string(text, iv, 'base64', outputEncoding);
     },
-    uint8Array(text: Buffer, iv: string | Buffer | null) {
-      const buffer = this.buffer(text, iv);
-      return new Uint8Array(buffer);
+    uint8Array(text: Uint8Array, iv: string | Buffer | null) {
+      const buffer = this.buffer(Buffer.from(text), iv);
+      return buffer;
     },
     string: (
       text: string,

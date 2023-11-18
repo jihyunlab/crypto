@@ -18,7 +18,7 @@ export class Aead {
     this.aad = aad;
   }
 
-  nonce(nonce?: string | Buffer) {
+  generateNonce(nonce?: string | Buffer) {
     const info = crypto.getCipherInfo(this.algorithm);
     let generated: string | Buffer;
 
@@ -178,9 +178,9 @@ export class Aead {
     base64(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
       return this.string(text, tag, nonce, 'base64', outputEncoding);
     },
-    uint8Array(text: Buffer, tag: Buffer, nonce: string | Buffer) {
-      const buffer = this.buffer(text, tag, nonce);
-      return new Uint8Array(buffer);
+    uint8Array(text: Uint8Array, tag: Buffer, nonce: string | Buffer) {
+      const buffer = this.buffer(Buffer.from(text), tag, nonce);
+      return buffer;
     },
     string: (
       text: string,
