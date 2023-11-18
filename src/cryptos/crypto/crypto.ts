@@ -2,14 +2,11 @@ import * as crypto from 'crypto';
 
 export class Crypto {
   private algorithm: string;
-  private password: string | Buffer;
-  private salt: string | Buffer;
+  private key: string | Buffer;
   private cipherInfo: crypto.CipherInfo;
 
   constructor(algorithm: string, password: string | Buffer, salt: string | Buffer) {
     this.algorithm = algorithm;
-    this.password = password;
-    this.salt = salt;
 
     const info = crypto.getCipherInfo(this.algorithm);
 
@@ -18,6 +15,7 @@ export class Crypto {
     }
 
     this.cipherInfo = info;
+    this.key = crypto.scryptSync(password, salt, this.cipherInfo.keyLength);
   }
 
   info() {
@@ -91,8 +89,7 @@ export class Crypto {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
-      const cipher = crypto.createCipheriv(this.algorithm, key, iv);
+      const cipher = crypto.createCipheriv(this.algorithm, this.key, iv);
 
       if (!inputEncoding) {
         inputEncoding = 'utf8';
@@ -108,8 +105,7 @@ export class Crypto {
       return encrypted;
     },
     buffer: (text: Buffer, iv: string | Buffer | null) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
-      const cipher = crypto.createCipheriv(this.algorithm, key, iv);
+      const cipher = crypto.createCipheriv(this.algorithm, this.key, iv);
 
       let encrypted = cipher.update(text);
       encrypted = Buffer.concat([encrypted, cipher.final()]);
@@ -138,8 +134,7 @@ export class Crypto {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
-      const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
+      const decipher = crypto.createDecipheriv(this.algorithm, this.key, iv);
 
       if (!inputEncoding) {
         inputEncoding = 'hex';
@@ -155,8 +150,7 @@ export class Crypto {
       return decrypted;
     },
     buffer: (text: Buffer, iv: string | Buffer | null) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
-      const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
+      const decipher = crypto.createDecipheriv(this.algorithm, this.key, iv);
 
       let decrypted = decipher.update(text);
       decrypted = Buffer.concat([decrypted, decipher.final()]);

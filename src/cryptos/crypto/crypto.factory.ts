@@ -1,73 +1,30 @@
 import { Crypto } from './crypto';
 
 export const CRYPTO = {
-  AES_128_CBC: 'AES-128-CBC',
-  AES_192_CBC: 'AES-192-CBC',
-  AES_256_CBC: 'AES-256-CBC',
-  AES_128_CFB: 'AES-128-CFB',
-  AES_192_CFB: 'AES-192-CFB',
-  AES_256_CFB: 'AES-256-CFB',
-  AES_128_CFB1: 'AES-128-CFB1',
-  AES_192_CFB1: 'AES-192-CFB1',
-  AES_256_CFB1: 'AES-256-CFB1',
-  AES_128_CFB8: 'AES-128-CFB8',
-  AES_192_CFB8: 'AES-192-CFB8',
-  AES_256_CFB8: 'AES-256-CFB8',
-  AES_128_CTR: 'AES-128-CTR',
-  AES_192_CTR: 'AES-192-CTR',
-  AES_256_CTR: 'AES-256-CTR',
-  AES_128_OFB: 'AES-128-OFB',
-  AES_192_OFB: 'AES-192-OFB',
-  AES_256_OFB: 'AES-256-OFB',
-  AES_128_ECB: 'AES-128-ECB',
-  AES_192_ECB: 'AES-192-ECB',
-  AES_256_ECB: 'AES-256-ECB',
+  AES_128_CBC: 'aes-128-cbc',
+  AES_192_CBC: 'aes-192-cbc',
+  AES_256_CBC: 'aes-256-cbc',
+  AES_128_CFB: 'aes-128-cfb',
+  AES_192_CFB: 'aes-192-cfb',
+  AES_256_CFB: 'aes-256-cfb',
+  AES_128_CFB1: 'aes-128-cfb1',
+  AES_192_CFB1: 'aes-192-cfb1',
+  AES_256_CFB1: 'aes-256-cfb1',
+  AES_128_CFB8: 'aes-128-cfb8',
+  AES_192_CFB8: 'aes-192-cfb8',
+  AES_256_CFB8: 'aes-256-cfb8',
+  AES_128_CTR: 'aes-128-ctr',
+  AES_192_CTR: 'aes-192-ctr',
+  AES_256_CTR: 'aes-256-ctr',
+  AES_128_OFB: 'aes-128-ofb',
+  AES_192_OFB: 'aes-192-ofb',
+  AES_256_OFB: 'aes-256-ofb',
+  AES_128_ECB: 'aes-128-ecb',
+  AES_192_ECB: 'aes-192-ecb',
+  AES_256_ECB: 'aes-256-ecb',
 } as const;
 export type CRYPTO = (typeof CRYPTO)[keyof typeof CRYPTO];
 
 export const create = (crypto: CRYPTO, password: string | Buffer, salt: string | Buffer) => {
-  switch (crypto) {
-    case CRYPTO.AES_128_CBC:
-      return new Crypto('aes-128-cbc', password, salt);
-    case CRYPTO.AES_192_CBC:
-      return new Crypto('aes-192-cbc', password, salt);
-    case CRYPTO.AES_256_CBC:
-      return new Crypto('aes-256-cbc', password, salt);
-    case CRYPTO.AES_128_CFB:
-      return new Crypto('aes-128-cfb', password, salt);
-    case CRYPTO.AES_192_CFB:
-      return new Crypto('aes-192-cfb', password, salt);
-    case CRYPTO.AES_256_CFB:
-      return new Crypto('aes-256-cfb', password, salt);
-    case CRYPTO.AES_128_CFB1:
-      return new Crypto('aes-128-cfb1', password, salt);
-    case CRYPTO.AES_192_CFB1:
-      return new Crypto('aes-192-cfb1', password, salt);
-    case CRYPTO.AES_256_CFB1:
-      return new Crypto('aes-256-cfb1', password, salt);
-    case CRYPTO.AES_128_CFB8:
-      return new Crypto('aes-128-cfb8', password, salt);
-    case CRYPTO.AES_192_CFB8:
-      return new Crypto('aes-192-cfb8', password, salt);
-    case CRYPTO.AES_256_CFB8:
-      return new Crypto('aes-256-cfb8', password, salt);
-    case CRYPTO.AES_128_CTR:
-      return new Crypto('aes-128-ctr', password, salt);
-    case CRYPTO.AES_192_CTR:
-      return new Crypto('aes-192-ctr', password, salt);
-    case CRYPTO.AES_256_CTR:
-      return new Crypto('aes-256-ctr', password, salt);
-    case CRYPTO.AES_128_OFB:
-      return new Crypto('aes-128-ofb', password, salt);
-    case CRYPTO.AES_192_OFB:
-      return new Crypto('aes-192-ofb', password, salt);
-    case CRYPTO.AES_256_OFB:
-      return new Crypto('aes-256-ofb', password, salt);
-    case CRYPTO.AES_128_ECB:
-      return new Crypto('aes-128-ecb', password, salt);
-    case CRYPTO.AES_192_ECB:
-      return new Crypto('aes-192-ecb', password, salt);
-    case CRYPTO.AES_256_ECB:
-      return new Crypto('aes-256-ecb', password, salt);
-  }
+  return new Crypto(crypto, password, salt);
 };
