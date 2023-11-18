@@ -5,6 +5,7 @@ export class Aead {
   private key: string | Buffer;
   private authTagLength?: number;
   private aad?: Buffer;
+  private info: crypto.CipherInfo;
 
   constructor(
     algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes,
@@ -16,15 +17,22 @@ export class Aead {
     this.key = key;
     this.authTagLength = authTagLength;
     this.aad = aad;
+
+    const info = crypto.getCipherInfo(this.algorithm);
+
+    if (!info) {
+      throw new Error('cipher information not found.');
+    }
+
+    this.info = info;
   }
 
   generateNonce(nonce?: string | Buffer) {
-    const info = crypto.getCipherInfo(this.algorithm);
     let generated: string | Buffer;
 
     if (!nonce) {
-      if (info && info.ivLength !== undefined && info.ivLength > 0) {
-        generated = crypto.randomBytes(info.ivLength);
+      if (this.info.ivLength !== undefined && this.info.ivLength > 0) {
+        generated = crypto.randomBytes(this.info.ivLength);
       } else {
         throw new Error('nonce cannot be generated automatically.');
       }
@@ -34,21 +42,19 @@ export class Aead {
 
     generated = nonce;
 
-    if (info) {
-      if (!info.ivLength) {
-        throw new Error('nonce length information could not be retrieved.');
+    if (!this.info.ivLength) {
+      throw new Error('nonce length information not found.');
+    } else {
+      if (typeof nonce === 'string') {
+        if (this.info.ivLength !== Buffer.from(nonce, 'utf8').length) {
+          const buffer = Buffer.alloc(this.info.ivLength);
+          generated = Buffer.concat([Buffer.from(nonce, 'utf8'), buffer]).subarray(0, this.info.ivLength);
+          generated = generated.toString('utf8');
+        }
       } else {
-        if (typeof nonce === 'string') {
-          if (info.ivLength !== Buffer.from(nonce, 'utf8').length) {
-            const buffer = Buffer.alloc(info.ivLength);
-            generated = Buffer.concat([Buffer.from(nonce, 'utf8'), buffer]).subarray(0, info.ivLength);
-            generated = generated.toString('utf8');
-          }
-        } else {
-          if (info.ivLength !== nonce.length) {
-            const buffer = Buffer.alloc(info.ivLength);
-            generated = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, info.ivLength);
-          }
+        if (this.info.ivLength !== nonce.length) {
+          const buffer = Buffer.alloc(this.info.ivLength);
+          generated = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, this.info.ivLength);
         }
       }
     }

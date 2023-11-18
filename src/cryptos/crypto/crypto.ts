@@ -4,24 +4,30 @@ export class Crypto {
   private algorithm: string;
   private password: string | Buffer;
   private salt: string | Buffer;
-  private keylen: number;
+  private info: crypto.CipherInfo;
 
-  constructor(algorithm: string, password: string | Buffer, salt: string | Buffer, keylen: number) {
+  constructor(algorithm: string, password: string | Buffer, salt: string | Buffer) {
     this.algorithm = algorithm;
     this.password = password;
     this.salt = salt;
-    this.keylen = keylen;
+
+    const info = crypto.getCipherInfo(this.algorithm);
+
+    if (!info) {
+      throw new Error('cipher information not found.');
+    }
+
+    this.info = info;
   }
 
   generateIv(iv?: string | Buffer) {
-    const info = crypto.getCipherInfo(this.algorithm);
     let generated: string | Buffer | null;
 
     if (!iv) {
       generated = null;
 
-      if (info && info.ivLength !== undefined && info.ivLength > 0) {
-        generated = Buffer.from(crypto.randomFillSync(new Uint8Array(info.ivLength)));
+      if (this.info.ivLength !== undefined && this.info.ivLength > 0) {
+        generated = Buffer.from(crypto.randomFillSync(new Uint8Array(this.info.ivLength)));
       }
 
       return generated;
@@ -29,21 +35,19 @@ export class Crypto {
 
     generated = iv;
 
-    if (info) {
-      if (!info.ivLength) {
-        generated = null;
+    if (!this.info.ivLength) {
+      generated = null;
+    } else {
+      if (typeof iv === 'string') {
+        if (this.info.ivLength !== Buffer.from(iv, 'utf8').length) {
+          const buffer = Buffer.alloc(this.info.ivLength);
+          generated = Buffer.concat([Buffer.from(iv, 'utf8'), buffer]).subarray(0, this.info.ivLength);
+          generated = generated.toString('utf8');
+        }
       } else {
-        if (typeof iv === 'string') {
-          if (info.ivLength !== Buffer.from(iv, 'utf8').length) {
-            const buffer = Buffer.alloc(info.ivLength);
-            generated = Buffer.concat([Buffer.from(iv, 'utf8'), buffer]).subarray(0, info.ivLength);
-            generated = generated.toString('utf8');
-          }
-        } else {
-          if (info.ivLength !== iv.length) {
-            const buffer = Buffer.alloc(info.ivLength);
-            generated = Buffer.concat([Buffer.from(iv), buffer]).subarray(0, info.ivLength);
-          }
+        if (this.info.ivLength !== iv.length) {
+          const buffer = Buffer.alloc(this.info.ivLength);
+          generated = Buffer.concat([Buffer.from(iv), buffer]).subarray(0, this.info.ivLength);
         }
       }
     }
@@ -83,7 +87,7 @@ export class Crypto {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.keylen);
+      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
       const cipher = crypto.createCipheriv(this.algorithm, key, iv);
 
       if (!inputEncoding) {
@@ -100,7 +104,7 @@ export class Crypto {
       return encrypted;
     },
     buffer: (text: Buffer, iv: string | Buffer | null) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.keylen);
+      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
       const cipher = crypto.createCipheriv(this.algorithm, key, iv);
 
       let encrypted = cipher.update(text);
@@ -130,7 +134,7 @@ export class Crypto {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.keylen);
+      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
       const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
 
       if (!inputEncoding) {
@@ -147,7 +151,7 @@ export class Crypto {
       return decrypted;
     },
     buffer: (text: Buffer, iv: string | Buffer | null) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.keylen);
+      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
       const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
 
       let decrypted = decipher.update(text);
