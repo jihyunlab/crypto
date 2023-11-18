@@ -10,6 +10,8 @@ export const AEAD = {
 } as const;
 export type AEAD = (typeof AEAD)[keyof typeof AEAD];
 
-export const create = (aead: AEAD, key: string | Buffer, authTagLength?: number, aad?: Buffer) => {
+export type AuthTagLength = 4 | 6 | 8 | 10 | 12 | 14 | 16;
+
+export const create = (aead: AEAD, key: string | Buffer, authTagLength?: AuthTagLength, aad?: Buffer) => {
   return new Aead(aead, key, authTagLength, aad);
 };

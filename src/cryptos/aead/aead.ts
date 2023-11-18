@@ -73,18 +73,18 @@ export class Aead {
         throw new Error('cipher not found. please check the algorithm.');
       }
 
-      if (this.aad) {
-        cipher.setAAD(this.aad, {
-          plaintextLength: Buffer.byteLength(text),
-        });
-      }
-
       if (!inputEncoding) {
         inputEncoding = 'utf8';
       }
 
       if (!outputEncoding) {
         outputEncoding = 'hex';
+      }
+
+      if (this.aad) {
+        cipher.setAAD(this.aad, {
+          plaintextLength: Buffer.from(text, inputEncoding as BufferEncoding).length,
+        });
       }
 
       let encrypted = cipher.update(text, inputEncoding, outputEncoding);
@@ -171,20 +171,20 @@ export class Aead {
         throw new Error('decipher not found. please check the algorithm.');
       }
 
-      decipher.setAuthTag(tag);
-
-      if (this.aad) {
-        decipher.setAAD(this.aad, {
-          plaintextLength: Buffer.byteLength(text),
-        });
-      }
-
       if (!inputEncoding) {
         inputEncoding = 'hex';
       }
 
       if (!outputEncoding) {
         outputEncoding = 'utf8';
+      }
+
+      decipher.setAuthTag(tag);
+
+      if (this.aad) {
+        decipher.setAAD(this.aad, {
+          plaintextLength: Buffer.from(text, inputEncoding as BufferEncoding).length,
+        });
       }
 
       let decrypted = decipher.update(text, inputEncoding, outputEncoding);
