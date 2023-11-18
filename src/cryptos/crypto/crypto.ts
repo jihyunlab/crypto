@@ -1,11 +1,19 @@
 import * as crypto from 'crypto';
+import { HASH } from '../hash/hash.factory';
 
 export class Crypto {
   private algorithm: string;
   private key: string | Buffer;
   private cipherInfo: crypto.CipherInfo;
 
-  constructor(algorithm: string, password: string | Buffer, salt: string | Buffer) {
+  constructor(
+    algorithm: string,
+    password: string | Buffer,
+    salt: string | Buffer,
+    pbkdf2 = true,
+    rounds = 1024,
+    hash: HASH = HASH.SHA_512
+  ) {
     this.algorithm = algorithm;
 
     const info = crypto.getCipherInfo(this.algorithm);
@@ -15,7 +23,15 @@ export class Crypto {
     }
 
     this.cipherInfo = info;
-    this.key = crypto.scryptSync(password, salt, this.cipherInfo.keyLength);
+    this.key = this.generateKey(password, salt, pbkdf2, rounds, hash);
+  }
+
+  private generateKey(password: string | Buffer, salt: string | Buffer, pbkdf2: boolean, rounds: number, hash: HASH) {
+    if (pbkdf2) {
+      return crypto.pbkdf2Sync(password, salt, rounds, this.cipherInfo.keyLength, hash);
+    } else {
+      return crypto.scryptSync(password, salt, this.cipherInfo.keyLength);
+    }
   }
 
   info() {

@@ -16,8 +16,15 @@ export const Hmac = {
 };
 
 export const Crypto = {
-  create: (crypto: CRYPTO, password: string | Buffer, salt: string | Buffer) => {
-    return createCrypto(crypto, password, salt);
+  create: (
+    crypto: CRYPTO,
+    password: string | Buffer,
+    salt: string | Buffer,
+    pbkdf2 = true,
+    rounds = 1024,
+    hash: HASH = HASH.SHA_512
+  ) => {
+    return createCrypto(crypto, password, salt, pbkdf2, rounds, hash);
   },
 };
 
