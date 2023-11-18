@@ -2,6 +2,10 @@ import { create as createHash, HASH } from './cryptos/hash/hash.factory';
 import { create as createHmac, HMAC } from './cryptos/hmac/hmac.factory';
 import { create as createCrypto, CRYPTO } from './cryptos/crypto/crypto.factory';
 import { create as createAead, AEAD } from './cryptos/aead/aead.factory';
+import { Cipher } from './helpers/cipher';
+import { Key, PBKDF } from './helpers/key';
+import { Iv } from './helpers/iv';
+import { Nonce } from './helpers/nonce';
 
 export const Hash = {
   create: (hash: HASH) => {
@@ -16,15 +20,8 @@ export const Hmac = {
 };
 
 export const Crypto = {
-  create: (
-    crypto: CRYPTO,
-    password: string | Buffer,
-    salt: string | Buffer,
-    pbkdf2 = true,
-    rounds = 1024,
-    hash: HASH = HASH.SHA_512
-  ) => {
-    return createCrypto(crypto, password, salt, pbkdf2, rounds, hash);
+  create: (crypto: CRYPTO, key: string | Buffer) => {
+    return createCrypto(crypto, key);
   },
 };
 
@@ -34,4 +31,4 @@ export const Aead = {
   },
 };
 
-export { HASH, HMAC, CRYPTO, AEAD };
+export { HASH, HMAC, CRYPTO, AEAD, Cipher, Key, PBKDF, Iv, Nonce };

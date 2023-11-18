@@ -1,11 +1,11 @@
 import { HMAC, Hmac } from '../src/index';
 
 describe('Hmac', () => {
-  const key = 'key';
-  const keyBuffer = Buffer.from('key', 'utf8');
+  const keyString = 'key';
+  const keyBuffer = Buffer.from(keyString, 'utf8');
 
-  const text = 'jihyunlab';
-  const textBuffer = Buffer.from(text, 'utf8');
+  const textString = 'jihyunlab';
+  const textBuffer = Buffer.from(textString, 'utf8');
 
   const map = new Map([
     ['SHA-224', '8010fcc2a4fc50411ccf4a7a26ea5e436b31b6287aa5c68716262446'],
@@ -35,19 +35,19 @@ describe('Hmac', () => {
         continue;
       }
 
-      let hash = Hmac.create(name, key).update(textBuffer);
+      let hash = Hmac.create(name, keyString).update(textBuffer);
       expect(hash.hex()).toBe(hex);
 
-      hash = Hmac.create(name, key).update(text);
+      hash = Hmac.create(name, keyString).update(textString);
       expect(hash.hex()).toBe(hex);
 
       hash = Hmac.create(name, keyBuffer).update(textBuffer);
       expect(hash.hex()).toBe(hex);
 
-      hash = Hmac.create(name, keyBuffer).update(text);
+      hash = Hmac.create(name, keyBuffer).update(textString);
       expect(hash.hex()).toBe(hex);
 
-      hash = Hmac.create(name, key);
+      hash = Hmac.create(name, keyString);
       expect(hash.update(textBuffer).hex()).toBe(hex);
       expect(hash.update(textBuffer).hex()).toBe(hex);
     }
@@ -64,19 +64,19 @@ describe('Hmac', () => {
         continue;
       }
 
-      let hash = Hmac.create(name, key).update(textBuffer);
+      let hash = Hmac.create(name, keyString).update(textBuffer);
       expect(hash.binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
 
-      hash = Hmac.create(name, key).update(text);
+      hash = Hmac.create(name, keyString).update(textString);
       expect(hash.binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
 
       hash = Hmac.create(name, keyBuffer).update(textBuffer);
       expect(hash.binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
 
-      hash = Hmac.create(name, keyBuffer).update(text);
+      hash = Hmac.create(name, keyBuffer).update(textString);
       expect(hash.binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
 
-      hash = Hmac.create(name, key);
+      hash = Hmac.create(name, keyString);
       expect(hash.update(textBuffer).binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
       expect(hash.update(textBuffer).binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
     }
@@ -93,19 +93,19 @@ describe('Hmac', () => {
         continue;
       }
 
-      let hash = Hmac.create(name, key).update(textBuffer);
+      let hash = Hmac.create(name, keyString).update(textBuffer);
       expect(hash.base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
 
-      hash = Hmac.create(name, key).update(text);
+      hash = Hmac.create(name, keyString).update(textString);
       expect(hash.base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
 
       hash = Hmac.create(name, keyBuffer).update(textBuffer);
       expect(hash.base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
 
-      hash = Hmac.create(name, keyBuffer).update(text);
+      hash = Hmac.create(name, keyBuffer).update(textString);
       expect(hash.base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
 
-      hash = Hmac.create(name, key);
+      hash = Hmac.create(name, keyString);
       expect(hash.update(textBuffer).base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
       expect(hash.update(textBuffer).base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
     }
@@ -122,19 +122,19 @@ describe('Hmac', () => {
         continue;
       }
 
-      let hash = Hmac.create(name, key).update(textBuffer);
+      let hash = Hmac.create(name, keyString).update(textBuffer);
       expect(hash.buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hmac.create(name, key).update(text);
+      hash = Hmac.create(name, keyString).update(textString);
       expect(hash.buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
 
       hash = Hmac.create(name, keyBuffer).update(textBuffer);
       expect(hash.buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hmac.create(name, keyBuffer).update(text);
+      hash = Hmac.create(name, keyBuffer).update(textString);
       expect(hash.buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hmac.create(name, key);
+      hash = Hmac.create(name, keyString);
       expect(hash.update(textBuffer).buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
       expect(hash.update(textBuffer).buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
     }
@@ -151,19 +151,19 @@ describe('Hmac', () => {
         continue;
       }
 
-      let hash = Hmac.create(name, key).update(textBuffer);
+      let hash = Hmac.create(name, keyString).update(textBuffer);
       expect(hash.digest()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hmac.create(name, key).update(text);
+      hash = Hmac.create(name, keyString).update(textString);
       expect(hash.digest()).toStrictEqual(Buffer.from(hex, 'hex'));
 
       hash = Hmac.create(name, keyBuffer).update(textBuffer);
       expect(hash.digest()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hmac.create(name, keyBuffer).update(text);
+      hash = Hmac.create(name, keyBuffer).update(textString);
       expect(hash.digest()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hmac.create(name, key);
+      hash = Hmac.create(name, keyString);
       expect(hash.update(textBuffer).digest()).toStrictEqual(Buffer.from(hex, 'hex'));
       expect(hash.update(textBuffer).digest()).toStrictEqual(Buffer.from(hex, 'hex'));
     }
@@ -180,19 +180,19 @@ describe('Hmac', () => {
         continue;
       }
 
-      let hash = Hmac.create(name, key).update(textBuffer);
+      let hash = Hmac.create(name, keyString).update(textBuffer);
       expect(hash.uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
 
-      hash = Hmac.create(name, key).update(text);
+      hash = Hmac.create(name, keyString).update(textString);
       expect(hash.uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
 
       hash = Hmac.create(name, keyBuffer).update(textBuffer);
       expect(hash.uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
 
-      hash = Hmac.create(name, keyBuffer).update(text);
+      hash = Hmac.create(name, keyBuffer).update(textString);
       expect(hash.uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
 
-      hash = Hmac.create(name, key);
+      hash = Hmac.create(name, keyString);
       expect(hash.update(textBuffer).uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
       expect(hash.update(textBuffer).uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
     }

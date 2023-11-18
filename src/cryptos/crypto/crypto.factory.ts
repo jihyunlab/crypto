@@ -1,5 +1,4 @@
 import { Crypto } from './crypto';
-import { HASH } from '../hash/hash.factory';
 
 export const CRYPTO = {
   AES_128_CBC: 'aes-128-cbc',
@@ -26,13 +25,6 @@ export const CRYPTO = {
 } as const;
 export type CRYPTO = (typeof CRYPTO)[keyof typeof CRYPTO];
 
-export const create = (
-  crypto: CRYPTO,
-  password: string | Buffer,
-  salt: string | Buffer,
-  pbkdf2 = true,
-  rounds = 1024,
-  hash: HASH = HASH.SHA_512
-) => {
-  return new Crypto(crypto, password, salt, pbkdf2, rounds, hash);
+export const create = (crypto: CRYPTO, key: string | Buffer) => {
+  return new Crypto(crypto, key);
 };

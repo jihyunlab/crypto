@@ -1,17 +1,20 @@
-import { CRYPTO, Crypto, HASH } from '../src/index';
+import { CRYPTO, Crypto, HASH, Iv, Key, PBKDF } from '../src/index';
 
 describe('Crypto', () => {
-  const password = 'password';
-  const passwordBuffer = Buffer.from('password', 'utf8');
+  const passwordString = 'password';
+  const passwordBuffer = Buffer.from(passwordString, 'utf8');
 
-  const salt = 'salt';
-  const saltBuffer = Buffer.from('salt', 'utf8');
+  const saltString = 'salt';
+  const saltBuffer = Buffer.from(saltString, 'utf8');
+
+  const keyString = 'key';
+  const keyBuffer = Buffer.from(keyString, 'utf8');
 
   const ivString = 'iv';
-  const ivBuffer = Buffer.from('iv', 'utf8');
+  const ivBuffer = Buffer.from(ivString, 'utf8');
 
-  const text = 'Welcome to JihyunLab.';
-  const textBuffer = Buffer.from(text, 'utf8');
+  const textString = 'Welcome to JihyunLab.';
+  const textBuffer = Buffer.from(textString, 'utf8');
 
   test('hex', () => {
     const values = Object.values(CRYPTO);
@@ -19,31 +22,41 @@ describe('Crypto', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let crypto = Crypto.create(name, password, salt);
-      let iv = crypto.generateIv();
+      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let crypto = Crypto.create(name, key);
+      let iv: string | Buffer | null;
 
-      let encrypted = crypto.encrypt.hex(text, iv);
+      iv = Iv.generate(name);
+
+      let encrypted = crypto.encrypt.hex(textString, iv);
       let decrypted = crypto.decrypt.hex(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, password, salt);
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
 
       decrypted = crypto.decrypt.hex(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, false);
-      iv = crypto.generateIv(ivString);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivString);
 
-      encrypted = crypto.encrypt.hex(text, iv);
+      encrypted = crypto.encrypt.hex(textString, iv);
       decrypted = crypto.decrypt.hex(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, true, 2048, HASH.SHA_256);
-      iv = crypto.generateIv(ivBuffer);
+      key = Key.normalize(name, keyString);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivBuffer);
 
-      encrypted = crypto.encrypt.hex(text, iv);
+      encrypted = crypto.encrypt.hex(textString, iv);
+
+      key = Key.normalize(name, keyBuffer);
+      crypto = Crypto.create(name, key);
+
       decrypted = crypto.decrypt.hex(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
     }
   });
 
@@ -53,31 +66,41 @@ describe('Crypto', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let crypto = Crypto.create(name, password, salt);
-      let iv = crypto.generateIv();
+      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let crypto = Crypto.create(name, key);
+      let iv: string | Buffer | null;
 
-      let encrypted = crypto.encrypt.binary(text, iv);
+      iv = Iv.generate(name);
+
+      let encrypted = crypto.encrypt.binary(textString, iv);
       let decrypted = crypto.decrypt.binary(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, password, salt);
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
 
       decrypted = crypto.decrypt.binary(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, false);
-      iv = crypto.generateIv(ivString);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivString);
 
-      encrypted = crypto.encrypt.binary(text, iv);
+      encrypted = crypto.encrypt.binary(textString, iv);
       decrypted = crypto.decrypt.binary(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, true, 2048, HASH.SHA_256);
-      iv = crypto.generateIv(ivBuffer);
+      key = Key.normalize(name, keyString);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivBuffer);
 
-      encrypted = crypto.encrypt.binary(text, iv);
+      encrypted = crypto.encrypt.binary(textString, iv);
+
+      key = Key.normalize(name, keyBuffer);
+      crypto = Crypto.create(name, key);
+
       decrypted = crypto.decrypt.binary(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
     }
   });
 
@@ -87,31 +110,41 @@ describe('Crypto', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let crypto = Crypto.create(name, password, salt);
-      let iv = crypto.generateIv();
+      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let crypto = Crypto.create(name, key);
+      let iv: string | Buffer | null;
 
-      let encrypted = crypto.encrypt.base64(text, iv);
+      iv = Iv.generate(name);
+
+      let encrypted = crypto.encrypt.base64(textString, iv);
       let decrypted = crypto.decrypt.base64(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, password, salt);
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
 
       decrypted = crypto.decrypt.base64(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, false);
-      iv = crypto.generateIv(ivString);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivString);
 
-      encrypted = crypto.encrypt.base64(text, iv);
+      encrypted = crypto.encrypt.base64(textString, iv);
       decrypted = crypto.decrypt.base64(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, true, 2048, HASH.SHA_256);
-      iv = crypto.generateIv(ivBuffer);
+      key = Key.normalize(name, keyString);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivBuffer);
 
-      encrypted = crypto.encrypt.base64(text, iv);
+      encrypted = crypto.encrypt.base64(textString, iv);
+
+      key = Key.normalize(name, keyBuffer);
+      crypto = Crypto.create(name, key);
+
       decrypted = crypto.decrypt.base64(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
     }
   });
 
@@ -121,39 +154,59 @@ describe('Crypto', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let crypto = Crypto.create(name, password, salt);
-      let iv = crypto.generateIv();
+      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let crypto = Crypto.create(name, key);
+      let iv: string | Buffer | null;
 
-      let encrypted = crypto.encrypt.string(text, iv);
+      iv = Iv.generate(name);
+
+      let encrypted = crypto.encrypt.string(textString, iv);
       let decrypted = crypto.decrypt.string(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, password, salt);
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
 
       decrypted = crypto.decrypt.string(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, false);
-      iv = crypto.generateIv(ivString);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      crypto = Crypto.create(name, key);
+      iv = Iv.generate(name);
 
-      encrypted = crypto.encrypt.string(text, iv);
+      encrypted = crypto.encrypt.string(textString, iv);
       decrypted = crypto.decrypt.string(encrypted, iv);
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
+
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
+
+      decrypted = crypto.decrypt.string(encrypted, iv);
+      expect(decrypted).toBe(textString);
+
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivString);
+
+      encrypted = crypto.encrypt.string(textString, iv);
+      decrypted = crypto.decrypt.string(encrypted, iv);
+      expect(decrypted).toBe(textString);
 
       const hashes = Object.values(HASH);
 
       for (let j = 0; j < hashes.length; j++) {
-        crypto = Crypto.create(name, passwordBuffer, saltBuffer, true, 2048, hashes[j]);
-        iv = crypto.generateIv(ivBuffer);
+        key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, hashes[j]);
+        crypto = Crypto.create(name, key);
+        iv = Iv.normalize(name, ivBuffer);
 
-        encrypted = crypto.encrypt.string(text, iv);
+        encrypted = crypto.encrypt.string(textString, iv);
         decrypted = crypto.decrypt.string(encrypted, iv);
-        expect(decrypted).toBe(text);
+        expect(decrypted).toBe(textString);
       }
 
-      encrypted = crypto.encrypt.string(text, iv, 'utf8', 'latin1');
+      encrypted = crypto.encrypt.string(textString, iv, 'utf8', 'latin1');
       decrypted = crypto.decrypt.string(encrypted, iv, 'latin1', 'utf8');
-      expect(decrypted).toBe(text);
+      expect(decrypted).toBe(textString);
     }
   });
 
@@ -163,20 +216,39 @@ describe('Crypto', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let crypto = Crypto.create(name, password, salt);
-      let iv = crypto.generateIv();
+      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let crypto = Crypto.create(name, key);
+      let iv: string | Buffer | null;
+
+      iv = Iv.generate(name);
 
       let encrypted = crypto.encrypt.buffer(textBuffer, iv);
       let decrypted = crypto.decrypt.buffer(encrypted, iv);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      crypto = Crypto.create(name, password, salt);
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
 
       decrypted = crypto.decrypt.buffer(encrypted, iv);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, false);
-      iv = crypto.generateIv(ivString);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      crypto = Crypto.create(name, key);
+      iv = Iv.generate(name);
+
+      encrypted = crypto.encrypt.buffer(textBuffer, iv);
+      decrypted = crypto.decrypt.buffer(encrypted, iv);
+      expect(decrypted).toStrictEqual(textBuffer);
+
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
+
+      decrypted = crypto.decrypt.buffer(encrypted, iv);
+      expect(decrypted).toStrictEqual(textBuffer);
+
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivString);
 
       encrypted = crypto.encrypt.buffer(textBuffer, iv);
       decrypted = crypto.decrypt.buffer(encrypted, iv);
@@ -185,8 +257,9 @@ describe('Crypto', () => {
       const hashes = Object.values(HASH);
 
       for (let j = 0; j < hashes.length; j++) {
-        crypto = Crypto.create(name, passwordBuffer, saltBuffer, true, 2048, hashes[j]);
-        iv = crypto.generateIv(ivBuffer);
+        key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, hashes[j]);
+        crypto = Crypto.create(name, key);
+        iv = Iv.normalize(name, ivBuffer);
 
         encrypted = crypto.encrypt.buffer(textBuffer, iv);
         decrypted = crypto.decrypt.buffer(encrypted, iv);
@@ -201,29 +274,40 @@ describe('Crypto', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let crypto = Crypto.create(name, password, salt);
-      let iv = crypto.generateIv();
+      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let crypto = Crypto.create(name, key);
+      let iv: string | Buffer | null;
+
+      iv = Iv.generate(name);
 
       let encrypted = crypto.encrypt.uint8Array(textBuffer, iv);
       let decrypted = crypto.decrypt.uint8Array(encrypted, iv);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      crypto = Crypto.create(name, password, salt);
+      key = Key.normalize(name, key);
+      crypto = Crypto.create(name, key);
 
       decrypted = crypto.decrypt.uint8Array(encrypted, iv);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, false);
-      iv = crypto.generateIv(ivString);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivString);
 
       encrypted = crypto.encrypt.uint8Array(textBuffer, iv);
       decrypted = crypto.decrypt.uint8Array(encrypted, iv);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      crypto = Crypto.create(name, passwordBuffer, saltBuffer, true, 2048, HASH.SHA_256);
-      iv = crypto.generateIv(ivBuffer);
+      key = Key.normalize(name, keyString);
+      crypto = Crypto.create(name, key);
+      iv = Iv.normalize(name, ivBuffer);
 
       encrypted = crypto.encrypt.uint8Array(textBuffer, iv);
+      expect(decrypted).toStrictEqual(textBuffer);
+
+      key = Key.normalize(name, keyBuffer);
+      crypto = Crypto.create(name, key);
+
       decrypted = crypto.decrypt.uint8Array(encrypted, iv);
       expect(decrypted).toStrictEqual(textBuffer);
     }

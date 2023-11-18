@@ -1,8 +1,8 @@
 import { HASH, Hash } from '../src/index';
 
 describe('Hash', () => {
-  const text = 'jihyunlab';
-  const textBuffer = Buffer.from(text, 'utf8');
+  const textString = 'jihyunlab';
+  const textBuffer = Buffer.from(textString, 'utf8');
 
   const map = new Map([
     ['SHA-224', 'bb09031c34196e1e3d6c74b88657f9c01d2a9adc6c6f0b12dd380b6e'],
@@ -35,7 +35,7 @@ describe('Hash', () => {
       let hash = Hash.create(name).update(textBuffer);
       expect(hash.hex()).toBe(hex);
 
-      hash = Hash.create(name).update(text);
+      hash = Hash.create(name).update(textString);
       expect(hash.hex()).toBe(hex);
 
       hash = Hash.create(name);
@@ -58,7 +58,7 @@ describe('Hash', () => {
       let hash = Hash.create(name).update(textBuffer);
       expect(hash.binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
 
-      hash = Hash.create(name).update(text);
+      hash = Hash.create(name).update(textString);
       expect(hash.binary()).toBe(Buffer.from(hex, 'hex').toString('binary'));
 
       hash = Hash.create(name);
@@ -81,7 +81,7 @@ describe('Hash', () => {
       let hash = Hash.create(name).update(textBuffer);
       expect(hash.base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
 
-      hash = Hash.create(name).update(text);
+      hash = Hash.create(name).update(textString);
       expect(hash.base64()).toBe(Buffer.from(hex, 'hex').toString('base64'));
 
       hash = Hash.create(name);
@@ -104,7 +104,7 @@ describe('Hash', () => {
       let hash = Hash.create(name).update(textBuffer);
       expect(hash.buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hash.create(name).update(text);
+      hash = Hash.create(name).update(textString);
       expect(hash.buffer()).toStrictEqual(Buffer.from(hex, 'hex'));
 
       hash = Hash.create(name);
@@ -127,7 +127,7 @@ describe('Hash', () => {
       let hash = Hash.create(name).update(textBuffer);
       expect(hash.digest()).toStrictEqual(Buffer.from(hex, 'hex'));
 
-      hash = Hash.create(name).update(text);
+      hash = Hash.create(name).update(textString);
       expect(hash.digest()).toStrictEqual(Buffer.from(hex, 'hex'));
 
       hash = Hash.create(name);
@@ -150,7 +150,7 @@ describe('Hash', () => {
       let hash = Hash.create(name).update(textBuffer);
       expect(hash.uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
 
-      hash = Hash.create(name).update(text);
+      hash = Hash.create(name).update(textString);
       expect(hash.uint8Array()).toStrictEqual(new Uint8Array(Buffer.from(hex, 'hex')));
 
       hash = Hash.create(name);

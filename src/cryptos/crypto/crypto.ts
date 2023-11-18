@@ -1,76 +1,12 @@
 import * as crypto from 'crypto';
-import { HASH } from '../hash/hash.factory';
 
 export class Crypto {
   private algorithm: string;
   private key: string | Buffer;
-  private cipherInfo: crypto.CipherInfo;
 
-  constructor(
-    algorithm: string,
-    password: string | Buffer,
-    salt: string | Buffer,
-    pbkdf2 = true,
-    rounds = 1024,
-    hash: HASH = HASH.SHA_512
-  ) {
+  constructor(algorithm: string, key: string | Buffer) {
     this.algorithm = algorithm;
-
-    const info = crypto.getCipherInfo(this.algorithm);
-
-    if (!info) {
-      throw new Error('cipher information not found.');
-    }
-
-    this.cipherInfo = info;
-    this.key = this.generateKey(password, salt, pbkdf2, rounds, hash);
-  }
-
-  private generateKey(password: string | Buffer, salt: string | Buffer, pbkdf2: boolean, rounds: number, hash: HASH) {
-    if (pbkdf2) {
-      return crypto.pbkdf2Sync(password, salt, rounds, this.cipherInfo.keyLength, hash);
-    } else {
-      return crypto.scryptSync(password, salt, this.cipherInfo.keyLength);
-    }
-  }
-
-  info() {
-    return this.cipherInfo;
-  }
-
-  generateIv(iv?: string | Buffer) {
-    let generated: string | Buffer | null;
-
-    if (!iv) {
-      generated = null;
-
-      if (this.cipherInfo.ivLength !== undefined && this.cipherInfo.ivLength > 0) {
-        generated = Buffer.from(crypto.randomFillSync(new Uint8Array(this.cipherInfo.ivLength)));
-      }
-
-      return generated;
-    }
-
-    generated = iv;
-
-    if (!this.cipherInfo.ivLength) {
-      generated = null;
-    } else {
-      if (typeof iv === 'string') {
-        if (this.cipherInfo.ivLength !== Buffer.from(iv, 'utf8').length) {
-          const buffer = Buffer.alloc(this.cipherInfo.ivLength);
-          generated = Buffer.concat([Buffer.from(iv, 'utf8'), buffer]).subarray(0, this.cipherInfo.ivLength);
-          generated = generated.toString('utf8');
-        }
-      } else {
-        if (this.cipherInfo.ivLength !== iv.length) {
-          const buffer = Buffer.alloc(this.cipherInfo.ivLength);
-          generated = Buffer.concat([Buffer.from(iv), buffer]).subarray(0, this.cipherInfo.ivLength);
-        }
-      }
-    }
-
-    return generated;
+    this.key = key;
   }
 
   encrypt = {
