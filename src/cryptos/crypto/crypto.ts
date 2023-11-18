@@ -4,7 +4,7 @@ export class Crypto {
   private algorithm: string;
   private password: string | Buffer;
   private salt: string | Buffer;
-  private info: crypto.CipherInfo;
+  private cipherInfo: crypto.CipherInfo;
 
   constructor(algorithm: string, password: string | Buffer, salt: string | Buffer) {
     this.algorithm = algorithm;
@@ -17,7 +17,11 @@ export class Crypto {
       throw new Error('cipher information not found.');
     }
 
-    this.info = info;
+    this.cipherInfo = info;
+  }
+
+  info() {
+    return this.cipherInfo;
   }
 
   generateIv(iv?: string | Buffer) {
@@ -26,8 +30,8 @@ export class Crypto {
     if (!iv) {
       generated = null;
 
-      if (this.info.ivLength !== undefined && this.info.ivLength > 0) {
-        generated = Buffer.from(crypto.randomFillSync(new Uint8Array(this.info.ivLength)));
+      if (this.cipherInfo.ivLength !== undefined && this.cipherInfo.ivLength > 0) {
+        generated = Buffer.from(crypto.randomFillSync(new Uint8Array(this.cipherInfo.ivLength)));
       }
 
       return generated;
@@ -35,19 +39,19 @@ export class Crypto {
 
     generated = iv;
 
-    if (!this.info.ivLength) {
+    if (!this.cipherInfo.ivLength) {
       generated = null;
     } else {
       if (typeof iv === 'string') {
-        if (this.info.ivLength !== Buffer.from(iv, 'utf8').length) {
-          const buffer = Buffer.alloc(this.info.ivLength);
-          generated = Buffer.concat([Buffer.from(iv, 'utf8'), buffer]).subarray(0, this.info.ivLength);
+        if (this.cipherInfo.ivLength !== Buffer.from(iv, 'utf8').length) {
+          const buffer = Buffer.alloc(this.cipherInfo.ivLength);
+          generated = Buffer.concat([Buffer.from(iv, 'utf8'), buffer]).subarray(0, this.cipherInfo.ivLength);
           generated = generated.toString('utf8');
         }
       } else {
-        if (this.info.ivLength !== iv.length) {
-          const buffer = Buffer.alloc(this.info.ivLength);
-          generated = Buffer.concat([Buffer.from(iv), buffer]).subarray(0, this.info.ivLength);
+        if (this.cipherInfo.ivLength !== iv.length) {
+          const buffer = Buffer.alloc(this.cipherInfo.ivLength);
+          generated = Buffer.concat([Buffer.from(iv), buffer]).subarray(0, this.cipherInfo.ivLength);
         }
       }
     }
@@ -87,7 +91,7 @@ export class Crypto {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
+      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
       const cipher = crypto.createCipheriv(this.algorithm, key, iv);
 
       if (!inputEncoding) {
@@ -104,7 +108,7 @@ export class Crypto {
       return encrypted;
     },
     buffer: (text: Buffer, iv: string | Buffer | null) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
+      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
       const cipher = crypto.createCipheriv(this.algorithm, key, iv);
 
       let encrypted = cipher.update(text);
@@ -134,7 +138,7 @@ export class Crypto {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
+      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
       const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
 
       if (!inputEncoding) {
@@ -151,7 +155,7 @@ export class Crypto {
       return decrypted;
     },
     buffer: (text: Buffer, iv: string | Buffer | null) => {
-      const key = crypto.scryptSync(this.password, this.salt, this.info.keyLength);
+      const key = crypto.scryptSync(this.password, this.salt, this.cipherInfo.keyLength);
       const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
 
       let decrypted = decipher.update(text);

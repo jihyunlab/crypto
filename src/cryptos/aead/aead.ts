@@ -5,7 +5,7 @@ export class Aead {
   private key: string | Buffer;
   private authTagLength?: number;
   private aad?: Buffer;
-  private info: crypto.CipherInfo;
+  private cipherInfo: crypto.CipherInfo;
 
   constructor(
     algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes,
@@ -14,7 +14,6 @@ export class Aead {
     aad?: Buffer
   ) {
     this.algorithm = algorithm;
-    this.key = key;
     this.authTagLength = authTagLength;
     this.aad = aad;
 
@@ -24,15 +23,41 @@ export class Aead {
       throw new Error('cipher information not found.');
     }
 
-    this.info = info;
+    this.cipherInfo = info;
+    this.key = this.normalizeKey(key);
+  }
+
+  private normalizeKey(key: string | Buffer) {
+    let normalized: string | Buffer;
+
+    normalized = key;
+
+    if (typeof key === 'string') {
+      if (this.cipherInfo.keyLength !== Buffer.from(key, 'utf8').length) {
+        const buffer = Buffer.alloc(this.cipherInfo.keyLength);
+        normalized = Buffer.concat([Buffer.from(key, 'utf8'), buffer]).subarray(0, this.cipherInfo.keyLength);
+        normalized = normalized.toString('utf8');
+      }
+    } else {
+      if (this.cipherInfo.keyLength !== key.length) {
+        const buffer = Buffer.alloc(this.cipherInfo.keyLength);
+        normalized = Buffer.concat([Buffer.from(key), buffer]).subarray(0, this.cipherInfo.keyLength);
+      }
+    }
+
+    return normalized;
+  }
+
+  info() {
+    return this.cipherInfo;
   }
 
   generateNonce(nonce?: string | Buffer) {
     let generated: string | Buffer;
 
     if (!nonce) {
-      if (this.info.ivLength !== undefined && this.info.ivLength > 0) {
-        generated = crypto.randomBytes(this.info.ivLength);
+      if (this.cipherInfo.ivLength !== undefined && this.cipherInfo.ivLength > 0) {
+        generated = crypto.randomBytes(this.cipherInfo.ivLength);
       } else {
         throw new Error('nonce cannot be generated automatically.');
       }
@@ -42,19 +67,19 @@ export class Aead {
 
     generated = nonce;
 
-    if (!this.info.ivLength) {
+    if (!this.cipherInfo.ivLength) {
       throw new Error('nonce length information not found.');
     } else {
       if (typeof nonce === 'string') {
-        if (this.info.ivLength !== Buffer.from(nonce, 'utf8').length) {
-          const buffer = Buffer.alloc(this.info.ivLength);
-          generated = Buffer.concat([Buffer.from(nonce, 'utf8'), buffer]).subarray(0, this.info.ivLength);
+        if (this.cipherInfo.ivLength !== Buffer.from(nonce, 'utf8').length) {
+          const buffer = Buffer.alloc(this.cipherInfo.ivLength);
+          generated = Buffer.concat([Buffer.from(nonce, 'utf8'), buffer]).subarray(0, this.cipherInfo.ivLength);
           generated = generated.toString('utf8');
         }
       } else {
-        if (this.info.ivLength !== nonce.length) {
-          const buffer = Buffer.alloc(this.info.ivLength);
-          generated = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, this.info.ivLength);
+        if (this.cipherInfo.ivLength !== nonce.length) {
+          const buffer = Buffer.alloc(this.cipherInfo.ivLength);
+          generated = Buffer.concat([Buffer.from(nonce), buffer]).subarray(0, this.cipherInfo.ivLength);
         }
       }
     }
