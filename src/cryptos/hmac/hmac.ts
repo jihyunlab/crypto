@@ -1,9 +1,13 @@
 import * as crypto from 'crypto';
 
 export class Hmac {
+  private algorithm: string;
+  private key: string | Buffer;
   private hmac: crypto.Hmac;
 
   constructor(algorithm: string, key: string | Buffer) {
+    this.algorithm = algorithm;
+    this.key = key;
     this.hmac = crypto.createHmac(algorithm, key);
   }
 
@@ -13,26 +17,35 @@ export class Hmac {
   }
 
   binary() {
-    return this.hmac.digest('binary');
+    return this.digest('binary').toString();
   }
 
   hex() {
-    return this.hmac.digest('hex');
+    return this.digest('hex').toString();
   }
 
   base64() {
-    return this.hmac.digest('base64');
+    return this.digest('base64').toString();
   }
 
-  digest() {
-    return this.hmac.digest();
+  digest(encoding?: crypto.BinaryToTextEncoding) {
+    let result: string | Buffer;
+
+    if (encoding) {
+      result = this.hmac.digest(encoding);
+    } else {
+      result = this.hmac.digest();
+    }
+
+    this.hmac = crypto.createHmac(this.algorithm, this.key);
+    return result;
   }
 
   buffer() {
-    return this.digest();
+    return Buffer.from(this.digest());
   }
 
   uint8Array() {
-    return new Uint8Array(this.digest());
+    return new Uint8Array(Buffer.from(this.digest()));
   }
 }

@@ -1,9 +1,11 @@
 import * as crypto from 'crypto';
 
 export class Hash {
+  private algorithm: string;
   private hash: crypto.Hash;
 
   constructor(algorithm: string) {
+    this.algorithm = algorithm;
     this.hash = crypto.createHash(algorithm);
   }
 
@@ -13,26 +15,35 @@ export class Hash {
   }
 
   binary() {
-    return this.hash.digest('binary');
+    return this.digest('binary').toString();
   }
 
   hex() {
-    return this.hash.digest('hex');
+    return this.digest('hex').toString();
   }
 
   base64() {
-    return this.hash.digest('base64');
+    return this.digest('base64').toString();
   }
 
-  digest() {
-    return this.hash.digest();
+  digest(encoding?: crypto.BinaryToTextEncoding) {
+    let result: string | Buffer;
+
+    if (encoding) {
+      result = this.hash.digest(encoding);
+    } else {
+      result = this.hash.digest();
+    }
+
+    this.hash = crypto.createHash(this.algorithm);
+    return result;
   }
 
   buffer() {
-    return this.digest();
+    return Buffer.from(this.digest());
   }
 
   uint8Array() {
-    return new Uint8Array(this.digest());
+    return new Uint8Array(Buffer.from(this.digest()));
   }
 }
