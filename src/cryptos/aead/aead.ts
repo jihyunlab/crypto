@@ -27,6 +27,7 @@ export class Aead {
       const string = this.string(text, nonce, inputEncoding, 'binary');
       return { text: string.text, tag: string.tag };
     },
+
     hex(text: string, nonce: string | Buffer, inputEncoding?: crypto.Encoding) {
       if (!inputEncoding) {
         inputEncoding = 'utf8';
@@ -35,6 +36,7 @@ export class Aead {
       const string = this.string(text, nonce, inputEncoding, 'hex');
       return { text: string.text, tag: string.tag };
     },
+
     base64(text: string, nonce: string | Buffer, inputEncoding?: crypto.Encoding) {
       if (!inputEncoding) {
         inputEncoding = 'utf8';
@@ -43,10 +45,12 @@ export class Aead {
       const string = this.string(text, nonce, inputEncoding, 'base64');
       return { text: string.text, tag: string.tag };
     },
+
     uint8Array(text: Buffer, nonce: string | Buffer) {
       const buffer = this.buffer(text, nonce);
       return { text: new Uint8Array(buffer.text), tag: buffer.tag };
     },
+
     string: (
       text: string,
       nonce: string | Buffer,
@@ -94,6 +98,7 @@ export class Aead {
 
       return { text: encrypted, tag: authTag };
     },
+
     buffer: (text: Buffer, nonce: string | Buffer) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
@@ -134,16 +139,20 @@ export class Aead {
     binary(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
       return this.string(text, tag, nonce, 'binary', outputEncoding);
     },
+
     hex(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
       return this.string(text, tag, nonce, 'hex', outputEncoding);
     },
+
     base64(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
       return this.string(text, tag, nonce, 'base64', outputEncoding);
     },
+
     uint8Array(text: Uint8Array, tag: Buffer, nonce: string | Buffer) {
       const buffer = this.buffer(Buffer.from(text), tag, nonce);
       return buffer;
     },
+
     string: (
       text: string,
       tag: Buffer,
@@ -192,6 +201,7 @@ export class Aead {
 
       return decrypted;
     },
+
     buffer: (text: Buffer, tag: Buffer, nonce: string | Buffer) => {
       let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
 

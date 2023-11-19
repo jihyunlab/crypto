@@ -17,6 +17,7 @@ export class Crypto {
 
       return this.string(text, iv, inputEncoding, 'binary');
     },
+
     hex(text: string, iv: string | Buffer | null, inputEncoding?: crypto.Encoding) {
       if (!inputEncoding) {
         inputEncoding = 'utf8';
@@ -24,6 +25,7 @@ export class Crypto {
 
       return this.string(text, iv, inputEncoding, 'hex');
     },
+
     base64(text: string, iv: string | Buffer | null, inputEncoding?: crypto.Encoding) {
       if (!inputEncoding) {
         inputEncoding = 'utf8';
@@ -31,10 +33,12 @@ export class Crypto {
 
       return this.string(text, iv, inputEncoding, 'base64');
     },
+
     uint8Array(text: Buffer, iv: string | Buffer | null) {
       const buffer = this.buffer(text, iv);
       return new Uint8Array(buffer);
     },
+
     string: (
       text: string,
       iv: string | Buffer | null,
@@ -56,6 +60,7 @@ export class Crypto {
 
       return encrypted;
     },
+
     buffer: (text: Buffer, iv: string | Buffer | null) => {
       const cipher = crypto.createCipheriv(this.algorithm, this.key, iv);
 
@@ -70,16 +75,20 @@ export class Crypto {
     binary(text: string, iv: string | Buffer | null, outputEncoding?: crypto.Encoding) {
       return this.string(text, iv, 'binary', outputEncoding);
     },
+
     hex(text: string, iv: string | Buffer | null, outputEncoding?: crypto.Encoding) {
       return this.string(text, iv, 'hex', outputEncoding);
     },
+
     base64(text: string, iv: string | Buffer | null, outputEncoding?: crypto.Encoding) {
       return this.string(text, iv, 'base64', outputEncoding);
     },
+
     uint8Array(text: Uint8Array, iv: string | Buffer | null) {
       const buffer = this.buffer(Buffer.from(text), iv);
       return buffer;
     },
+
     string: (
       text: string,
       iv: string | Buffer | null,
@@ -101,6 +110,7 @@ export class Crypto {
 
       return decrypted;
     },
+
     buffer: (text: Buffer, iv: string | Buffer | null) => {
       const decipher = crypto.createDecipheriv(this.algorithm, this.key, iv);
 
