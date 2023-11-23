@@ -6,7 +6,7 @@
   "author": "JihyunLab <info@jihyunlab.com> (https://jihyunlab.com)",
   "homepage": "https://jihyunlab.com/library/npm/crypto",
   "repository": "https://github.com/jihyunlab/crypto",
-  "bugs": "http://github.com/jihyunlab/crypto/issues",
+  "bugs": "https://github.com/jihyunlab/crypto/issues",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
