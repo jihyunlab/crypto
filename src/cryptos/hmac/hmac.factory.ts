@@ -12,6 +12,6 @@ export const HMAC = {
 } as const;
 export type HMAC = (typeof HMAC)[keyof typeof HMAC];
 
-export const create = (hmac: HMAC, key: string | Buffer) => {
+export const create = (hmac: string, key: string | Buffer) => {
   return new Hmac(hmac, key);
 };

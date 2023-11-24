@@ -12,6 +12,6 @@ export const HASH = {
 } as const;
 export type HASH = (typeof HASH)[keyof typeof HASH];
 
-export const create = (hash: HASH) => {
+export const create = (hash: string) => {
   return new Hash(hash);
 };

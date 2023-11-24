@@ -8,13 +8,13 @@ import { Iv } from './helpers/iv';
 import { Nonce } from './helpers/nonce';
 
 export const Hash = {
-  create: (hash: HASH) => {
+  create: (hash: string) => {
     return createHash(hash);
   },
 };
 
 export const Hmac = {
-  create: (hmac: HMAC, key: string | Buffer) => {
+  create: (hmac: string, key: string | Buffer) => {
     return createHmac(hmac, key);
   },
 };
