@@ -1,13 +1,13 @@
 import * as crypto from 'crypto';
 
 export class Aead {
-  private algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes;
+  private algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes | crypto.CipherOCBTypes;
   private key: string | Buffer;
   private authTagLength?: number;
   private aad?: Buffer;
 
   constructor(
-    algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes,
+    algorithm: crypto.CipherCCMTypes | crypto.CipherGCMTypes | crypto.CipherOCBTypes,
     key: string | Buffer,
     authTagLength?: number,
     aad?: Buffer
@@ -59,16 +59,21 @@ export class Aead {
     ) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
-      if (this.algorithm as crypto.CipherCCMTypes) {
+      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
           authTagLength = 16;
         }
 
-        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
-          authTagLength: authTagLength,
-        });
+        cipher = crypto.createCipheriv(
+          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
+          this.key,
+          nonce,
+          {
+            authTagLength: authTagLength,
+          }
+        );
       } else if (this.algorithm as crypto.CipherGCMTypes) {
         cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
@@ -102,16 +107,21 @@ export class Aead {
     buffer: (text: Buffer, nonce: string | Buffer) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
-      if (this.algorithm as crypto.CipherCCMTypes) {
+      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
           authTagLength = 16;
         }
 
-        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
-          authTagLength: authTagLength,
-        });
+        cipher = crypto.createCipheriv(
+          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
+          this.key,
+          nonce,
+          {
+            authTagLength: authTagLength,
+          }
+        );
       } else if (this.algorithm as crypto.CipherGCMTypes) {
         cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
@@ -162,16 +172,21 @@ export class Aead {
     ) => {
       let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
 
-      if (this.algorithm as crypto.CipherCCMTypes) {
+      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
           authTagLength = 16;
         }
 
-        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
-          authTagLength: authTagLength,
-        });
+        decipher = crypto.createDecipheriv(
+          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
+          this.key,
+          nonce,
+          {
+            authTagLength: authTagLength,
+          }
+        );
       } else if (this.algorithm as crypto.CipherGCMTypes) {
         decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
@@ -205,16 +220,21 @@ export class Aead {
     buffer: (text: Buffer, tag: Buffer, nonce: string | Buffer) => {
       let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
 
-      if (this.algorithm as crypto.CipherCCMTypes) {
+      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
           authTagLength = 16;
         }
 
-        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
-          authTagLength: authTagLength,
-        });
+        decipher = crypto.createDecipheriv(
+          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
+          this.key,
+          nonce,
+          {
+            authTagLength: authTagLength,
+          }
+        );
       } else if (this.algorithm as crypto.CipherGCMTypes) {
         decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
