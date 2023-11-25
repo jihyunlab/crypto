@@ -25,6 +25,6 @@ export const CRYPTO = {
 } as const;
 export type CRYPTO = (typeof CRYPTO)[keyof typeof CRYPTO];
 
-export const create = (crypto: CRYPTO, key: string | Buffer) => {
+export const create = (crypto: string, key: string | Buffer) => {
   return new Crypto(crypto, key);
 };

@@ -20,7 +20,7 @@ export const Hmac = {
 };
 
 export const Crypto = {
-  create: (crypto: CRYPTO, key: string | Buffer) => {
+  create: (crypto: string, key: string | Buffer) => {
     return createCrypto(crypto, key);
   },
 };

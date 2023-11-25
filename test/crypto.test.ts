@@ -312,4 +312,34 @@ describe('Crypto', () => {
       expect(decrypted).toStrictEqual(textBuffer);
     }
   });
+
+  test('example(basic)', () => {
+    const key = Key.generate(CRYPTO.AES_256_CBC, 'password', 'salt');
+    const iv = Iv.generate(CRYPTO.AES_256_CBC);
+
+    const encrypted = Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.hex('string', iv);
+    const decrypted = Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.hex(encrypted, iv);
+
+    expect(decrypted).toBe('string');
+  });
+
+  test('example(buffer)', () => {
+    const key = Key.generate(CRYPTO.AES_256_CBC, Buffer.from('password'), Buffer.from('salt'));
+    const iv = Iv.generate(CRYPTO.AES_256_CBC);
+
+    const encrypted = Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
+    const decrypted = Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
+
+    expect(decrypted).toStrictEqual(Buffer.from('string'));
+  });
+
+  test('example(custom)', () => {
+    const key = Key.generate(CRYPTO.AES_256_CBC, 'password', 'salt');
+    const iv = Iv.generate(CRYPTO.AES_256_CBC);
+
+    const encrypted = Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.string('string', iv, 'utf8', 'hex');
+    const decrypted = Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.string(encrypted, iv, 'hex', 'utf8');
+
+    expect(decrypted).toStrictEqual('string');
+  });
 });

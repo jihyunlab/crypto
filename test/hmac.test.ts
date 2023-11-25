@@ -198,19 +198,10 @@ describe('Hmac', () => {
     }
   });
 
-  test('custom', () => {
-    const values = Object.values(HMAC);
+  test('example', () => {
+    const hex = String(map.get('SHA-256'));
 
-    for (let i = 0; i < values.length; i++) {
-      const name = values[i];
-      const hex = map.get(name);
-
-      if (!hex) {
-        continue;
-      }
-
-      let digest = Hmac.create('sha256', keyString).update(textString).digest('base64url');
-      expect(digest).toStrictEqual(Buffer.from(hex, 'hex').toString('base64url'));
-    }
+    let digest = Hmac.create('sha256', keyString).update(textString).digest('base64url');
+    expect(digest).toEqual(Buffer.from(hex, 'hex').toString('base64url'));
   });
 });
