@@ -315,4 +315,34 @@ describe('Aead', () => {
       expect(decrypted).toStrictEqual(textBuffer);
     }
   });
+
+  test('example(basic)', () => {
+    const key = Key.generate(AEAD.AES_256_CCM, 'password', 'salt');
+    const nonce = Nonce.generate(AEAD.AES_256_CCM);
+
+    const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.hex('string', nonce);
+    const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.hex(encrypted.text, encrypted.tag, nonce);
+
+    expect(decrypted).toBe('string');
+  });
+
+  test('example(buffer)', () => {
+    const key = Key.generate(AEAD.AES_256_CCM, 'password', 'salt');
+    const nonce = Nonce.generate(AEAD.AES_256_CCM);
+
+    const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.buffer(Buffer.from('string'), nonce);
+    const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.buffer(encrypted.text, encrypted.tag, nonce);
+
+    expect(decrypted).toStrictEqual(Buffer.from('string'));
+  });
+
+  test('example(normalize)', () => {
+    const key = Key.normalize(AEAD.AES_256_CCM, Buffer.from('key'));
+    const nonce = Nonce.normalize(AEAD.AES_256_CCM, Buffer.from('nonce'));
+
+    const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.buffer(Buffer.from('string'), nonce);
+    const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.buffer(encrypted.text, encrypted.tag, nonce);
+
+    expect(decrypted).toStrictEqual(Buffer.from('string'));
+  });
 });
