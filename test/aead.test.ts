@@ -41,7 +41,7 @@ describe('Aead', () => {
       decrypted = aead.decrypt.hex(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
       nonce = Nonce.normalize(name, nonceString);
 
@@ -85,7 +85,7 @@ describe('Aead', () => {
       decrypted = aead.decrypt.binary(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
       nonce = Nonce.normalize(name, nonceString);
 
@@ -129,7 +129,7 @@ describe('Aead', () => {
       decrypted = aead.decrypt.base64(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
       nonce = Nonce.normalize(name, nonceString);
 
@@ -173,7 +173,7 @@ describe('Aead', () => {
       decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
       nonce = Nonce.generate(name);
 
@@ -235,7 +235,7 @@ describe('Aead', () => {
       decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
       nonce = Nonce.generate(name);
 
@@ -293,7 +293,7 @@ describe('Aead', () => {
       decrypted = aead.decrypt.uint8Array(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA_256);
+      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
       nonce = Nonce.normalize(name, nonceString);
 

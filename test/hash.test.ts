@@ -5,6 +5,8 @@ describe('Hash', () => {
   const textBuffer = Buffer.from(textString, 'utf8');
 
   const map = new Map([
+    ['MD5', 'a2d0d29a4b2afcec65a55b7c7f79581f '],
+    ['SHA1', '29719a122f3225999c6bf64a213110e3adc7ee22'],
     ['SHA-224', 'bb09031c34196e1e3d6c74b88657f9c01d2a9adc6c6f0b12dd380b6e'],
     ['SHA-256', 'c86f2dd19d3a3ff4f1c890a520f30a9165cc2cb3e23f39d0b95d65007ac65264'],
     ['SHA-384', 'fafc0d25d3b79037e396608db8a27d1cfb7280da4dc51874b518c20073b890016aa89c8b6b17531b161538c3d8467970'],
@@ -19,6 +21,7 @@ describe('Hash', () => {
       'SHA3-512',
       '0853975fb2ae207be68ce49d2f0bc51f72fb9eaa3ffb66338ba08f5ef4c738bc09b2cfef71e5db74e9b1531360381213579174dd5d52713228bfac158e0d8518',
     ],
+    ['SM3', 'ECAA7923E43DA835AC2085D1AFE92A499A8FED9A02A0C8622C1EC09DAB5BFDFA'],
   ]);
 
   test('hex', () => {

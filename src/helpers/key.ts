@@ -39,7 +39,7 @@ export const Key = {
     salt: string | Buffer,
     pbkdf: PBKDF = PBKDF.PBKDF2,
     rounds = 1024,
-    hash: HASH = HASH.SHA_512
+    hash: HASH = HASH.SHA512
   ) {
     const info = Cipher.info(algorithm);
 
