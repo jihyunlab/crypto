@@ -1,9 +1,9 @@
 import * as crypto from 'crypto';
-import { CRYPTO } from '../cryptos/crypto/crypto.factory';
+import { CIPHER } from '../cryptos/cipher/cipher.factory';
 import { AEAD } from '../cryptos/aead/aead.factory';
 
 export const Cipher = {
-  info(algorithm: CRYPTO | AEAD) {
+  info(algorithm: CIPHER | AEAD) {
     const info = crypto.getCipherInfo(algorithm);
 
     if (!info) {

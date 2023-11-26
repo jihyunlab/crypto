@@ -1,6 +1,6 @@
-import { Crypto } from './crypto';
+import { Cipher } from './cipher';
 
-export const CRYPTO = {
+export const CIPHER = {
   AES_128_CBC: 'aes-128-cbc',
   AES_192_CBC: 'aes-192-cbc',
   AES_256_CBC: 'aes-256-cbc',
@@ -70,8 +70,8 @@ export const CRYPTO = {
   SM4_ECB: 'sm4-ecb',
   SM4_OFB: 'sm4-ofb',
 } as const;
-export type CRYPTO = (typeof CRYPTO)[keyof typeof CRYPTO];
+export type CIPHER = (typeof CIPHER)[keyof typeof CIPHER];
 
-export const create = (crypto: string, key: string | Buffer) => {
-  return new Crypto(crypto, key);
+export const create = (cipher: string, key: string | Buffer) => {
+  return new Cipher(cipher, key);
 };

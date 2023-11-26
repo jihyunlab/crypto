@@ -1,11 +1,11 @@
 import { create as createHash, HASH } from './cryptos/hash/hash.factory';
 import { create as createHmac, HMAC } from './cryptos/hmac/hmac.factory';
-import { create as createCrypto, CRYPTO } from './cryptos/crypto/crypto.factory';
-import { create as createAead, AEAD, AuthTagLength } from './cryptos/aead/aead.factory';
-import { Cipher } from './helpers/cipher';
-import { Key, PBKDF } from './helpers/key';
-import { Iv } from './helpers/iv';
-import { Nonce } from './helpers/nonce';
+import { create as createCipher, CIPHER } from './cryptos/cipher/cipher.factory';
+import { create as createAead, AEAD } from './cryptos/aead/aead.factory';
+import { Cipher as CipherHelper } from './helpers/cipher';
+import { Key as KeyHelper, PBKDF } from './helpers/key';
+import { Iv as IvHelper } from './helpers/iv';
+import { Nonce as NonceHelper } from './helpers/nonce';
 
 export const Hash = {
   create: (hash: string) => {
@@ -19,16 +19,23 @@ export const Hmac = {
   },
 };
 
-export const Crypto = {
-  create: (crypto: string, key: string | Buffer) => {
-    return createCrypto(crypto, key);
+export const Cipher = {
+  create: (cipher: string, key: string | Buffer) => {
+    return createCipher(cipher, key);
   },
 };
 
 export const Aead = {
-  create: (aead: AEAD, key: string | Buffer, authTagLength?: AuthTagLength, aad?: Buffer) => {
+  create: (aead: AEAD, key: string | Buffer, authTagLength?: 4 | 6 | 8 | 10 | 12 | 14 | 16, aad?: Buffer) => {
     return createAead(aead, key, authTagLength, aad);
   },
 };
 
-export { HASH, HMAC, CRYPTO, AEAD, PBKDF, Cipher, Key, Iv, Nonce, AuthTagLength };
+export const Helper = {
+  cipher: CipherHelper,
+  key: KeyHelper,
+  iv: IvHelper,
+  nonce: NonceHelper,
+};
+
+export { HASH, HMAC, CIPHER, AEAD, PBKDF };

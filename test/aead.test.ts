@@ -1,4 +1,4 @@
-import { AEAD, Aead, HASH, Nonce, Key, PBKDF } from '../src/index';
+import { AEAD, Aead, HASH, Helper, PBKDF } from '../src/index';
 
 describe('Aead', () => {
   const passwordString = 'password';
@@ -25,37 +25,37 @@ describe('Aead', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
       let aead = Aead.create(name, key);
       let nonce: string | Buffer;
 
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       let encrypted = aead.encrypt.hex(textString, nonce);
       let decrypted = aead.decrypt.hex(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key);
 
       decrypted = aead.decrypt.hex(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
-      nonce = Nonce.normalize(name, nonceString);
+      nonce = Helper.nonce.normalize(name, nonceString);
 
       encrypted = aead.encrypt.hex(textString, nonce);
       decrypted = aead.decrypt.hex(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, keyString);
+      key = Helper.key.normalize(name, keyString);
       aead = Aead.create(name, key, authTagLength, aad);
-      nonce = Nonce.normalize(name, nonceBuffer);
+      nonce = Helper.nonce.normalize(name, nonceBuffer);
 
       encrypted = aead.encrypt.hex(textString, nonce);
 
-      key = Key.normalize(name, keyBuffer);
+      key = Helper.key.normalize(name, keyBuffer);
       aead = Aead.create(name, key, authTagLength, aad);
 
       decrypted = aead.decrypt.hex(encrypted.text, encrypted.tag, nonce);
@@ -69,37 +69,37 @@ describe('Aead', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
       let aead = Aead.create(name, key);
       let nonce: string | Buffer;
 
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       let encrypted = aead.encrypt.binary(textString, nonce);
       let decrypted = aead.decrypt.binary(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key);
 
       decrypted = aead.decrypt.binary(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
-      nonce = Nonce.normalize(name, nonceString);
+      nonce = Helper.nonce.normalize(name, nonceString);
 
       encrypted = aead.encrypt.binary(textString, nonce);
       decrypted = aead.decrypt.binary(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, keyString);
+      key = Helper.key.normalize(name, keyString);
       aead = Aead.create(name, key, authTagLength, aad);
-      nonce = Nonce.normalize(name, nonceBuffer);
+      nonce = Helper.nonce.normalize(name, nonceBuffer);
 
       encrypted = aead.encrypt.binary(textString, nonce);
 
-      key = Key.normalize(name, keyBuffer);
+      key = Helper.key.normalize(name, keyBuffer);
       aead = Aead.create(name, key, authTagLength, aad);
 
       decrypted = aead.decrypt.binary(encrypted.text, encrypted.tag, nonce);
@@ -113,37 +113,37 @@ describe('Aead', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
       let aead = Aead.create(name, key);
       let nonce: string | Buffer;
 
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       let encrypted = aead.encrypt.base64(textString, nonce);
       let decrypted = aead.decrypt.base64(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key);
 
       decrypted = aead.decrypt.base64(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
-      nonce = Nonce.normalize(name, nonceString);
+      nonce = Helper.nonce.normalize(name, nonceString);
 
       encrypted = aead.encrypt.base64(textString, nonce);
       decrypted = aead.decrypt.base64(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, keyString);
+      key = Helper.key.normalize(name, keyString);
       aead = Aead.create(name, key, authTagLength, aad);
-      nonce = Nonce.normalize(name, nonceBuffer);
+      nonce = Helper.nonce.normalize(name, nonceBuffer);
 
       encrypted = aead.encrypt.base64(textString, nonce);
 
-      key = Key.normalize(name, keyBuffer);
+      key = Helper.key.normalize(name, keyBuffer);
       aead = Aead.create(name, key, authTagLength, aad);
 
       decrypted = aead.decrypt.base64(encrypted.text, encrypted.tag, nonce);
@@ -157,39 +157,39 @@ describe('Aead', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
       let aead = Aead.create(name, key);
       let nonce: string | Buffer;
 
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       let encrypted = aead.encrypt.string(textString, nonce);
       let decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key);
 
       decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       encrypted = aead.encrypt.string(textString, nonce);
       decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key, authTagLength);
 
       decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toBe(textString);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF);
       aead = Aead.create(name, key);
-      nonce = Nonce.normalize(name, nonceString);
+      nonce = Helper.nonce.normalize(name, nonceString);
 
       encrypted = aead.encrypt.string(textString, nonce);
       decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
@@ -198,9 +198,9 @@ describe('Aead', () => {
       const hashes = Object.values(HASH);
 
       for (let j = 0; j < hashes.length; j++) {
-        key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, hashes[j]);
+        key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, hashes[j]);
         aead = Aead.create(name, key);
-        nonce = Nonce.normalize(name, nonceBuffer);
+        nonce = Helper.nonce.normalize(name, nonceBuffer);
 
         encrypted = aead.encrypt.string(textString, nonce);
         decrypted = aead.decrypt.string(encrypted.text, encrypted.tag, nonce);
@@ -219,39 +219,39 @@ describe('Aead', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
       let aead = Aead.create(name, key);
       let nonce: string | Buffer;
 
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       let encrypted = aead.encrypt.buffer(textBuffer, nonce);
       let decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key);
 
       decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       encrypted = aead.encrypt.buffer(textBuffer, nonce);
       decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key, authTagLength);
 
       decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF);
       aead = Aead.create(name, key);
-      nonce = Nonce.normalize(name, nonceString);
+      nonce = Helper.nonce.normalize(name, nonceString);
 
       encrypted = aead.encrypt.buffer(textBuffer, nonce);
       decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
@@ -260,9 +260,9 @@ describe('Aead', () => {
       const hashes = Object.values(HASH);
 
       for (let j = 0; j < hashes.length; j++) {
-        key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, hashes[j]);
+        key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, hashes[j]);
         aead = Aead.create(name, key);
-        nonce = Nonce.normalize(name, nonceBuffer);
+        nonce = Helper.nonce.normalize(name, nonceBuffer);
 
         encrypted = aead.encrypt.buffer(textBuffer, nonce);
         decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
@@ -277,38 +277,38 @@ describe('Aead', () => {
     for (let i = 0; i < values.length; i++) {
       const name = values[i];
 
-      let key: string | Buffer = Key.generate(name, passwordString, saltString);
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
       let aead = Aead.create(name, key);
       let nonce: string | Buffer;
 
-      nonce = Nonce.generate(name);
+      nonce = Helper.nonce.generate(name);
 
       let encrypted = aead.encrypt.uint8Array(textBuffer, nonce);
       let decrypted = aead.decrypt.uint8Array(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.normalize(name, key);
+      key = Helper.key.normalize(name, key);
       aead = Aead.create(name, key);
 
       decrypted = aead.decrypt.uint8Array(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
       aead = Aead.create(name, key, authTagLength);
-      nonce = Nonce.normalize(name, nonceString);
+      nonce = Helper.nonce.normalize(name, nonceString);
 
       encrypted = aead.encrypt.uint8Array(textBuffer, nonce);
       decrypted = aead.decrypt.uint8Array(encrypted.text, encrypted.tag, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.normalize(name, keyString);
+      key = Helper.key.normalize(name, keyString);
       aead = Aead.create(name, key, authTagLength, aad);
-      nonce = Nonce.normalize(name, nonceBuffer);
+      nonce = Helper.nonce.normalize(name, nonceBuffer);
 
       encrypted = aead.encrypt.uint8Array(textBuffer, nonce);
       expect(decrypted).toStrictEqual(textBuffer);
 
-      key = Key.normalize(name, keyBuffer);
+      key = Helper.key.normalize(name, keyBuffer);
       aead = Aead.create(name, key, authTagLength, aad);
 
       decrypted = aead.decrypt.uint8Array(encrypted.text, encrypted.tag, nonce);
@@ -317,8 +317,8 @@ describe('Aead', () => {
   });
 
   test('example(basic)', () => {
-    const key = Key.generate(AEAD.AES_256_CCM, 'password', 'salt');
-    const nonce = Nonce.generate(AEAD.AES_256_CCM);
+    const key = Helper.key.generate(AEAD.AES_256_CCM, 'password', 'salt');
+    const nonce = Helper.nonce.generate(AEAD.AES_256_CCM);
 
     const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.hex('string', nonce);
     const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.hex(encrypted.text, encrypted.tag, nonce);
@@ -327,8 +327,8 @@ describe('Aead', () => {
   });
 
   test('example(buffer)', () => {
-    const key = Key.generate(AEAD.AES_256_CCM, 'password', 'salt');
-    const nonce = Nonce.generate(AEAD.AES_256_CCM);
+    const key = Helper.key.generate(AEAD.AES_256_CCM, 'password', 'salt');
+    const nonce = Helper.nonce.generate(AEAD.AES_256_CCM);
 
     const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.buffer(Buffer.from('string'), nonce);
     const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.buffer(encrypted.text, encrypted.tag, nonce);
@@ -337,8 +337,8 @@ describe('Aead', () => {
   });
 
   test('example(normalize)', () => {
-    const key = Key.normalize(AEAD.AES_256_CCM, Buffer.from('key'));
-    const nonce = Nonce.normalize(AEAD.AES_256_CCM, Buffer.from('nonce'));
+    const key = Helper.key.normalize(AEAD.AES_256_CCM, Buffer.from('key'));
+    const nonce = Helper.nonce.normalize(AEAD.AES_256_CCM, Buffer.from('nonce'));
 
     const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.buffer(Buffer.from('string'), nonce);
     const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.buffer(encrypted.text, encrypted.tag, nonce);

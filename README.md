@@ -70,53 +70,53 @@ Symmetric-key algorithm is an encryption technique that uses the same key for en
 Encryption functions can be implemented using predefined symmetric-key algorithm types and separately provided functions.
 
 ```javascript
-import { CRYPTO, Crypto, Key, Iv, PBKDF, HASH } from '@jihyunlab/crypto';
+import { Cipher, Helper, CIPHER, PBKDF, HASH } from '@jihyunlab/crypto';
 
 // Generates a key for the encryption algorithm.
-const key = Key.generate(CRYPTO.AES_256_CBC, 'password', 'salt');
+const key = Helper.key.generate(CIPHER.AES_256_CBC, 'password', 'salt');
 
 // Create an IV(Initialization Vector) for encryption.
-const iv = Iv.generate(CRYPTO.AES_256_CBC);
+const iv = Helper.iv.generate(CIPHER.AES_256_CBC);
 
-const encrypted = Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.hex('string', iv);
-const decrypted = Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.hex(encrypted, iv);
+const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.hex('string', iv);
+const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.hex(encrypted, iv);
 ```
 
 You can implement cryptographic functions using buffers.
 
 ```javascript
-const key = Key.generate(CRYPTO.AES_256_CBC, Buffer.from('password'), Buffer.from('salt'));
-const iv = Iv.generate(CRYPTO.AES_256_CBC);
+const key = Helper.key.generate(CIPHER.AES_256_CBC, Buffer.from('password'), Buffer.from('salt'));
+const iv = Helper.iv.generate(CIPHER.AES_256_CBC);
 
-const encrypted = Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
-const decrypted = Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
+const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
+const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
 ```
 
 You can use predefined functions to select the output type of the encrypted text and the input type of the text to be decrypted.
 
 ```javascript
-Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.hex('string', iv);
-Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.hex(encrypted, iv);
+Cipher.create(CIPHER.AES_256_CBC, key).encrypt.hex('string', iv);
+Cipher.create(CIPHER.AES_256_CBC, key).decrypt.hex(encrypted, iv);
 
-Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.binary('string', iv);
-Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.binary(encrypted, iv);
+Cipher.create(CIPHER.AES_256_CBC, key).encrypt.binary('string', iv);
+Cipher.create(CIPHER.AES_256_CBC, key).decrypt.binary(encrypted, iv);
 
-Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.base64('string', iv);
-Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.base64(encrypted, iv);
+Cipher.create(CIPHER.AES_256_CBC, key).encrypt.base64('string', iv);
+Cipher.create(CIPHER.AES_256_CBC, key).decrypt.base64(encrypted, iv);
 
-Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
-Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
+Cipher.create(CIPHER.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
+Cipher.create(CIPHER.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
 
-Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.uint8Array(Buffer.from('string'), iv);
-Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.uint8Array(encrypted, iv);
+Cipher.create(CIPHER.AES_256_CBC, key).encrypt.uint8Array(Buffer.from('string'), iv);
+Cipher.create(CIPHER.AES_256_CBC, key).decrypt.uint8Array(encrypted, iv);
 ```
 
 If the algorithm you want to use is not defined, you can enter the algorithm directly and select the input and output types for the encrypted and decrypted text.\
 The input algorithm and input and output text types must be types defined in Node.js.
 
 ```javascript
-const encrypted = Crypto.create(CRYPTO.AES_256_CBC, key).encrypt.string('string', iv, 'utf8', 'base64url');
-const decrypted = Crypto.create(CRYPTO.AES_256_CBC, key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
+const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.string('string', iv, 'utf8', 'base64url');
+const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
 ```
 
 ## Symmetric-key algorithm(AEAD)
@@ -128,13 +128,13 @@ AEAD(Authenticated Encryption with Associated Data) is an encryption technology 
 Encryption functions can be implemented using predefined encryption algorithm types and separately provided functions.
 
 ```javascript
-import { AEAD, Aead, Nonce, Key, PBKDF, HASH } from '@jihyunlab/crypto';
+import { Aead, Helper, AEAD, PBKDF, HASH } from '@jihyunlab/crypto';
 
 // Generates a key for the encryption algorithm.
-const key = Key.generate(AEAD.AES_256_CCM, 'password', 'salt');
+const key = Helper.key.generate(AEAD.AES_256_CCM, 'password', 'salt');
 
 // Create an nonce for encryption.
-const nonce = Nonce.generate(AEAD.AES_256_CCM);
+const nonce = Helper.nonce.generate(AEAD.AES_256_CCM);
 
 const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.hex('string', nonce);
 const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.hex(encrypted.text, encrypted.tag, nonce);
@@ -143,8 +143,8 @@ const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.hex(encrypted.text,
 You can implement cryptographic functions using buffers.
 
 ```javascript
-const key = Key.generate(AEAD.AES_256_CCM, 'password', 'salt');
-const nonce = Nonce.generate(AEAD.AES_256_CCM);
+const key = Helper.key.generate(AEAD.AES_256_CCM, 'password', 'salt');
+const nonce = Helper.nonce.generate(AEAD.AES_256_CCM);
 
 const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.buffer(Buffer.from('string'), nonce);
 const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.buffer(encrypted.text, encrypted.tag, nonce);
@@ -154,8 +154,8 @@ You can use it by directly entering the key, nonce, and IV.\
 The input value can be converted to a value of a size suitable for the algorithm using the normalize function.
 
 ```javascript
-const key = Key.normalize(AEAD.AES_256_CCM, Buffer.from('key'));
-const nonce = Nonce.normalize(AEAD.AES_256_CCM, Buffer.from('nonce'));
+const key = Helper.key.normalize(AEAD.AES_256_CCM, Buffer.from('key'));
+const nonce = Helper.nonce.normalize(AEAD.AES_256_CCM, Buffer.from('nonce'));
 ```
 
 ## Credits
