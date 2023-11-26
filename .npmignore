@@ -1,6 +1,6 @@
 *
 
-!/dist/src/**/*
+!/dist/**/*
 
 !/package.json
 
