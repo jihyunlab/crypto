@@ -334,11 +334,11 @@ describe('Cipher', () => {
   });
 
   test('example(custom)', () => {
-    const key = Helper.key.generate(CIPHER.AES_256_CBC, 'password', 'salt');
-    const iv = Helper.iv.generate(CIPHER.AES_256_CBC);
+    const key = Helper.key.generate('sm4-cbc', 'password', 'salt');
+    const iv = Helper.iv.generate('sm4-cbc');
 
-    const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.string('string', iv, 'utf8', 'base64url');
-    const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
+    const encrypted = Cipher.create('sm4-cbc', key).encrypt.string('string', iv, 'utf8', 'base64url');
+    const decrypted = Cipher.create('sm4-cbc', key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
 
     expect(decrypted).toStrictEqual('string');
   });

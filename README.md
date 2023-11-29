@@ -115,8 +115,8 @@ If the algorithm you want to use is not defined, you can enter the algorithm dir
 The input algorithm and input and output text types must be types defined in Node.js.
 
 ```javascript
-const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.string('string', iv, 'utf8', 'base64url');
-const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
+const encrypted = Cipher.create('sm4-cbc', key).encrypt.string('string', iv, 'utf8', 'base64url');
+const decrypted = Cipher.create('sm4-cbc', key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
 ```
 
 ## Symmetric-key algorithm(AEAD)
