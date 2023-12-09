@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
-import { CIPHER } from '../cryptos/cipher/cipher.factory';
-import { Cipher } from './cipher';
+import { CIPHER } from '../cryptos/cipher/crypto-factory.cipher';
+import { Cipher } from './cipher.helper';
 
 export const Iv = {
   normalize(algorithm: CIPHER, iv: string | Buffer) {

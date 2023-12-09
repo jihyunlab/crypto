@@ -1,11 +1,11 @@
-import { create as createHash, HASH } from './cryptos/hash/hash.factory';
-import { create as createHmac, HMAC } from './cryptos/hmac/hmac.factory';
-import { create as createCipher, CIPHER } from './cryptos/cipher/cipher.factory';
-import { create as createAead, AEAD } from './cryptos/aead/aead.factory';
-import { Cipher as CipherHelper } from './helpers/cipher';
-import { Key as KeyHelper, PBKDF } from './helpers/key';
-import { Iv as IvHelper } from './helpers/iv';
-import { Nonce as NonceHelper } from './helpers/nonce';
+import { create as createHash, HASH } from './cryptos/hash/crypto-factory.hash';
+import { create as createHmac, HMAC } from './cryptos/hmac/crypto-factory.hmac';
+import { create as createCipher, CIPHER } from './cryptos/cipher/crypto-factory.cipher';
+import { create as createAead, AEAD } from './cryptos/aead/crypto-factory.aead';
+import { Cipher as CipherHelper } from './helpers/cipher.helper';
+import { Key as KeyHelper, PBKDF } from './helpers/key.helper';
+import { Iv as IvHelper } from './helpers/iv.helper';
+import { Nonce as NonceHelper } from './helpers/nonce.helper';
 
 export const Hash = {
   create: (hash: string) => {

@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
-import { CIPHER } from '../cryptos/cipher/cipher.factory';
-import { AEAD } from '../cryptos/aead/aead.factory';
+import { CIPHER } from '../cryptos/cipher/crypto-factory.cipher';
+import { AEAD } from '../cryptos/aead/crypto-factory.aead';
 
 export const Cipher = {
   info(algorithm: CIPHER | AEAD) {
@@ -11,5 +11,13 @@ export const Cipher = {
     }
 
     return info;
+  },
+
+  hashes() {
+    return crypto.getHashes();
+  },
+
+  ciphers() {
+    return crypto.getCiphers();
   },
 };

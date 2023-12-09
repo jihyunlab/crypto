@@ -1,4 +1,4 @@
-import { Aead } from './aead';
+import { Aead } from './crypto.aead';
 
 export const AEAD = {
   AES_128_CCM: 'aes-128-ccm',

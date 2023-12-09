@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
-import { AEAD } from '../cryptos/aead/aead.factory';
-import { Cipher } from './cipher';
+import { AEAD } from '../cryptos/aead/crypto-factory.aead';
+import { Cipher } from './cipher.helper';
 
 export const Nonce = {
   normalize(algorithm: AEAD, nonce: string | Buffer) {

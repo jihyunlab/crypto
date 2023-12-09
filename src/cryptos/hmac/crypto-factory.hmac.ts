@@ -1,4 +1,4 @@
-import { Hmac } from './hmac';
+import { Hmac } from './crypto.hmac';
 
 export const HMAC = {
   MD5: 'md5',

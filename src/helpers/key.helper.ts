@@ -1,8 +1,8 @@
 import * as crypto from 'crypto';
-import { HASH } from '../cryptos/hash/hash.factory';
-import { CIPHER } from '../cryptos/cipher/cipher.factory';
-import { AEAD } from '../cryptos/aead/aead.factory';
-import { Cipher } from './cipher';
+import { HASH } from '../cryptos/hash/crypto-factory.hash';
+import { CIPHER } from '../cryptos/cipher/crypto-factory.cipher';
+import { AEAD } from '../cryptos/aead/crypto-factory.aead';
+import { Cipher } from './cipher.helper';
 
 export const PBKDF = {
   PBKDF: 'PBKDF',

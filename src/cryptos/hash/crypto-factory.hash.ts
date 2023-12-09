@@ -1,4 +1,4 @@
-import { Hash } from './hash';
+import { Hash } from './crypto.hash';
 
 export const HASH = {
   MD5: 'md5',
