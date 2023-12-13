@@ -5,6 +5,8 @@
 @jihyunlab/crypto was developed to increase the convenience of implementing cryptographic functions.\
 @jihyunlab/crypto provides hash, HMAC, and symmetric-key algorithm functions, and functions related to actual encryption use encryption module of Node.js.
 
+For a simpler implementation of text and file encryption, use the [@jihyunlab/secret](https://www.npmjs.com/package/@jihyunlab/secret).
+
 ## Requirements
 
 Node.js
@@ -111,7 +113,7 @@ Cipher.create(CIPHER.AES_256_CBC, key).encrypt.uint8Array(Buffer.from('string'),
 Cipher.create(CIPHER.AES_256_CBC, key).decrypt.uint8Array(encrypted, iv);
 ```
 
-If the algorithm you want to use is not defined, you can enter the algorithm directly and select the input and output types for the encrypted and decrypted text.\
+If the algorithm you want to use is not defined, you can enter the algorithm directly and select the input and output types for the text.\
 The input algorithm and input and output text types must be types defined in Node.js.
 
 ```javascript
