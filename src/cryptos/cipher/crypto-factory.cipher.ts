@@ -46,6 +46,7 @@ export const CIPHER = {
   CAMELLIA_128_ECB: 'camellia-128-ecb',
   CAMELLIA_192_ECB: 'camellia-192-ecb',
   CAMELLIA_256_ECB: 'camellia-256-ecb',
+  SM4: 'sm4',
   SM4_CBC: 'sm4-cbc',
   SM4_CFB: 'sm4-cfb',
   SM4_CTR: 'sm4-ctr',

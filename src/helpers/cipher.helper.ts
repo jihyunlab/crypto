@@ -20,4 +20,8 @@ export const Cipher = {
   ciphers() {
     return crypto.getCiphers();
   },
+
+  curves() {
+    return crypto.getCurves();
+  },
 };
