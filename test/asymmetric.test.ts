@@ -176,8 +176,6 @@ describe('Asymmetric', () => {
     let signer = Asymmetric.create.signer(keypair.privateKey);
     let signature = signer.sign(message);
 
-    console.log(JSON.stringify(signature));
-
     const exported = keypair.publicKey.export({ type: 'spki', format: 'der' });
 
     const x = exported.subarray(-64, -32);
