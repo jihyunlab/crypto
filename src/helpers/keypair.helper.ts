@@ -13,6 +13,8 @@ const KEYPAIR = {
 type KEYPAIR = (typeof KEYPAIR)[keyof typeof KEYPAIR];
 
 export const CURVE = {
+  P256: 'prime256v1',
+  P384: 'secp384r1',
   PRIME256V1: 'prime256v1',
   SECP256K1: 'secp256k1',
   SECP384R1: 'secp384r1',
@@ -25,6 +27,18 @@ export type CURVE = (typeof CURVE)[keyof typeof CURVE];
 
 export const KeyPair = {
   generate: {
+    secretKey(key: Buffer) {
+      return crypto.createSecretKey(key);
+    },
+
+    privateKey(key: string | Buffer | crypto.PrivateKeyInput | crypto.JsonWebKeyInput) {
+      return crypto.createPrivateKey(key);
+    },
+
+    publicKey(key: string | Buffer | crypto.PublicKeyInput | crypto.JsonWebKeyInput | crypto.KeyObject) {
+      return crypto.createPublicKey(key);
+    },
+
     rsa(
       options:
         | crypto.RSAKeyPairKeyObjectOptions
@@ -115,11 +129,11 @@ export const KeyPair = {
 
     // EC presets
     p256() {
-      return crypto.generateKeyPairSync(KEYPAIR.EC, { namedCurve: CURVE.PRIME256V1 });
+      return crypto.generateKeyPairSync(KEYPAIR.EC, { namedCurve: CURVE.P256 });
     },
 
     p384() {
-      return crypto.generateKeyPairSync(KEYPAIR.EC, { namedCurve: CURVE.SECP384R1 });
+      return crypto.generateKeyPairSync(KEYPAIR.EC, { namedCurve: CURVE.P384 });
     },
 
     brainpoolP256() {

@@ -1,9 +1,8 @@
 import * as crypto from 'crypto';
-import { CIPHER } from '../cryptos/cipher/crypto-factory.cipher';
 import { Cipher } from './cipher.helper';
 
 export const Iv = {
-  normalize(algorithm: CIPHER, iv: string | Buffer) {
+  normalize(algorithm: string /* CIPHER */, iv: string | Buffer) {
     const info = Cipher.info(algorithm);
     let normalized: string | Buffer | null;
 
@@ -29,7 +28,7 @@ export const Iv = {
     return normalized;
   },
 
-  generate(algorithm: CIPHER) {
+  generate(algorithm: string /* CIPHER */) {
     const info = Cipher.info(algorithm);
     let generated: Buffer | null = null;
 

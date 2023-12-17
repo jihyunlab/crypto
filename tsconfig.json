@@ -9,6 +9,6 @@
     // "sourceMap": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts", "src/cryptos/asymmetric/.asymmetric.ts"],
   "exclude": ["node_modules", "dist", "jest.config.js"]
 }

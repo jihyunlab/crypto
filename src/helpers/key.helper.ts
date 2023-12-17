@@ -1,7 +1,5 @@
 import * as crypto from 'crypto';
 import { HASH } from '../cryptos/hash/crypto-factory.hash';
-import { CIPHER } from '../cryptos/cipher/crypto-factory.cipher';
-import { AEAD } from '../cryptos/aead/crypto-factory.aead';
 import { Cipher } from './cipher.helper';
 
 export const PBKDF = {
@@ -11,7 +9,7 @@ export const PBKDF = {
 export type PBKDF = (typeof PBKDF)[keyof typeof PBKDF];
 
 export const Key = {
-  normalize(algorithm: CIPHER | AEAD, key: string | Buffer) {
+  normalize(algorithm: string /* CIPHER | AEAD */, key: string | Buffer) {
     const info = Cipher.info(algorithm);
     let normalized: string | Buffer;
 
@@ -34,12 +32,12 @@ export const Key = {
   },
 
   generate(
-    algorithm: CIPHER | AEAD,
+    algorithm: string /* CIPHER | AEAD */,
     password: string | Buffer,
     salt: string | Buffer,
     pbkdf: PBKDF = PBKDF.PBKDF2,
     rounds = 1024,
-    hash: HASH = HASH.SHA512
+    hash: string /* HASH */ = HASH.SHA512
   ) {
     const info = Cipher.info(algorithm);
 
