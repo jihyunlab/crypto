@@ -165,7 +165,18 @@ describe('Hash', () => {
   test('example', () => {
     const hex = String(map.get('SHA-256'));
 
-    let digest = Hash.create('sha256').update(textString).digest('base64url');
+    const digest = Hash.create('sha256').update(textString).digest('base64url');
     expect(digest).toEqual(Buffer.from(hex, 'hex').toString('base64url'));
+
+    const buffer = Hash.create('sha256').update(textString).digest();
+    expect(buffer).toStrictEqual(Buffer.from(hex, 'hex'));
+
+    expect(Hash.create('sha256').update(textString).binary()).toEqual(Buffer.from(hex, 'hex').toString('binary'));
+    expect(Hash.create('sha256').update(textString).hex()).toEqual(Buffer.from(hex, 'hex').toString('hex'));
+    expect(Hash.create('sha256').update(textString).base64()).toEqual(Buffer.from(hex, 'hex').toString('base64'));
+    expect(Hash.create('sha256').update(textString).buffer()).toEqual(Buffer.from(hex, 'hex'));
+    expect(Hash.create('sha256').update(textString).uint8Array()).toStrictEqual(
+      new Uint8Array(Buffer.from(hex, 'hex'))
+    );
   });
 });
