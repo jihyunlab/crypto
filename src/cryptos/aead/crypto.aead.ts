@@ -59,7 +59,11 @@ export class Aead {
     ) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
-      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
+      if (this.algorithm === 'aes-128-gcm' || this.algorithm === 'aes-192-gcm' || this.algorithm === 'aes-256-gcm') {
+        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength,
+        });
+      } else {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
@@ -74,12 +78,6 @@ export class Aead {
             authTagLength: authTagLength,
           }
         );
-      } else if (this.algorithm as crypto.CipherGCMTypes) {
-        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
-          authTagLength: this.authTagLength,
-        });
-      } else {
-        throw new Error('cipher not found. please check the algorithm.');
       }
 
       if (!inputEncoding) {
@@ -107,7 +105,11 @@ export class Aead {
     buffer: (text: Buffer, nonce: string | Buffer) => {
       let cipher: crypto.CipherCCM | crypto.CipherGCM;
 
-      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
+      if (this.algorithm === 'aes-128-gcm' || this.algorithm === 'aes-192-gcm' || this.algorithm === 'aes-256-gcm') {
+        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength,
+        });
+      } else {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
@@ -122,12 +124,6 @@ export class Aead {
             authTagLength: authTagLength,
           }
         );
-      } else if (this.algorithm as crypto.CipherGCMTypes) {
-        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
-          authTagLength: this.authTagLength,
-        });
-      } else {
-        throw new Error('cipher not found. please check the algorithm.');
       }
 
       if (this.aad) {
@@ -170,9 +166,13 @@ export class Aead {
       inputEncoding?: crypto.Encoding,
       outputEncoding?: crypto.Encoding
     ) => {
-      let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
+      let decipher: crypto.DecipherCCM | crypto.DecipherOCB | crypto.DecipherGCM;
 
-      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
+      if (this.algorithm === 'aes-128-gcm' || this.algorithm === 'aes-192-gcm' || this.algorithm === 'aes-256-gcm') {
+        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength,
+        });
+      } else {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
@@ -187,12 +187,6 @@ export class Aead {
             authTagLength: authTagLength,
           }
         );
-      } else if (this.algorithm as crypto.CipherGCMTypes) {
-        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
-          authTagLength: this.authTagLength,
-        });
-      } else {
-        throw new Error('decipher not found. please check the algorithm.');
       }
 
       if (!inputEncoding) {
@@ -218,9 +212,13 @@ export class Aead {
     },
 
     buffer: (text: Buffer, tag: Buffer, nonce: string | Buffer) => {
-      let decipher: crypto.DecipherCCM | crypto.DecipherGCM;
+      let decipher: crypto.DecipherCCM | crypto.DecipherOCB | crypto.DecipherGCM;
 
-      if ((this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes)) {
+      if (this.algorithm === 'aes-128-gcm' || this.algorithm === 'aes-192-gcm' || this.algorithm === 'aes-256-gcm') {
+        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength,
+        });
+      } else {
         let authTagLength = this.authTagLength;
 
         if (!authTagLength) {
@@ -235,12 +233,6 @@ export class Aead {
             authTagLength: authTagLength,
           }
         );
-      } else if (this.algorithm as crypto.CipherGCMTypes) {
-        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
-          authTagLength: this.authTagLength,
-        });
-      } else {
-        throw new Error('decipher not found. please check the algorithm.');
       }
 
       decipher.setAuthTag(tag);
