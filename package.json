@@ -13,13 +13,13 @@
     "build": "tsc --build",
     "start": "tsc --build && node dist/src/index.js",
     "clean": "tsc --build --clean",
-    "test": "jest"
+    "lint": "eslint bin/**/*.{ts,tsx,js,jsx} && eslint test/**/*.{ts,tsx,js,jsx}",
+    "test": "jest --coverage --coverageReporters=cobertura"
   },
   "keywords": [
-    "jihyunlab",
+    "crypto",
     "hash",
     "hmac",
-    "crypto",
     "aead",
     "sha",
     "aes",
@@ -30,7 +30,7 @@
     "aes-ocb"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=16"
   },
   "devDependencies": {
     "@jihyunlab/eslint-config": "^1.1.1",
