@@ -1,4 +1,4 @@
-import { HMAC, Hmac } from '../src/index';
+import { HMAC, Hmac } from '../../src/index';
 
 describe('Hmac', () => {
   const keyString = 'key';

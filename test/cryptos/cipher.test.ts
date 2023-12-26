@@ -1,4 +1,4 @@
-import { CIPHER, Cipher, HASH, Helper, PBKDF } from '../src/index';
+import { CIPHER, Cipher, HASH, Helper, PBKDF } from '../../src/index';
 
 describe('Cipher', () => {
   const passwordString = 'password';

@@ -1,4 +1,4 @@
-import { HASH, Hash } from '../src/index';
+import { HASH, Hash } from '../../src/index';
 
 describe('Hash', () => {
   const textString = 'jihyunlab';

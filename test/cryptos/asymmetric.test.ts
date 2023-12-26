@@ -1,4 +1,4 @@
-import { Asymmetric, CURVE, Helper } from '../src/index';
+import { Asymmetric, CURVE, Helper } from '../../src/index';
 import * as crypto from 'crypto';
 
 describe('Asymmetric', () => {

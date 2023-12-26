@@ -1,4 +1,4 @@
-import { AEAD, Aead, HASH, Helper, PBKDF } from '../src/index';
+import { AEAD, Aead, HASH, Helper, PBKDF } from '../../src/index';
 
 describe('Aead', () => {
   const passwordString = 'password';
