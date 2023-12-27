@@ -27,10 +27,6 @@ export type CURVE = (typeof CURVE)[keyof typeof CURVE];
 
 export const KeyPair = {
   generate: {
-    secretKey(key: Buffer) {
-      return crypto.createSecretKey(key);
-    },
-
     privateKey(key: string | Buffer | crypto.PrivateKeyInput | crypto.JsonWebKeyInput) {
       return crypto.createPrivateKey(key);
     },
