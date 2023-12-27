@@ -19,7 +19,7 @@ describe('Aead', () => {
   const textString = 'Welcome to JihyunLab.';
   const textBuffer = Buffer.from(textString, 'utf8');
 
-  test('hex', () => {
+  test('hex()', () => {
     const values = Object.values(AEAD);
 
     for (let i = 0; i < values.length; i++) {
@@ -63,7 +63,7 @@ describe('Aead', () => {
     }
   });
 
-  test('binary', () => {
+  test('binary()', () => {
     const values = Object.values(AEAD);
 
     for (let i = 0; i < values.length; i++) {
@@ -107,7 +107,7 @@ describe('Aead', () => {
     }
   });
 
-  test('base64', () => {
+  test('base64()', () => {
     const values = Object.values(AEAD);
 
     for (let i = 0; i < values.length; i++) {
@@ -151,7 +151,7 @@ describe('Aead', () => {
     }
   });
 
-  test('string', () => {
+  test('string()', () => {
     const values = Object.values(AEAD);
 
     for (let i = 0; i < values.length; i++) {
@@ -213,7 +213,7 @@ describe('Aead', () => {
     }
   });
 
-  test('buffer', () => {
+  test('buffer()', () => {
     const values = Object.values(AEAD);
 
     for (let i = 0; i < values.length; i++) {
@@ -271,7 +271,29 @@ describe('Aead', () => {
     }
   });
 
-  test('uint8Array', () => {
+  test('buffer(aes-gcm)', () => {
+    const values = Object.values(AEAD);
+
+    for (let i = 0; i < values.length; i++) {
+      const name = values[i];
+
+      if (name !== AEAD.AES_128_GCM && name !== AEAD.AES_192_GCM && name !== AEAD.AES_256_GCM) {
+        continue;
+      }
+
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
+      let aead = Aead.create(name, key, null);
+      let nonce: string | Buffer;
+
+      nonce = Helper.nonce.generate(name);
+
+      let encrypted = aead.encrypt.buffer(textBuffer, nonce);
+      let decrypted = aead.decrypt.buffer(encrypted.text, encrypted.tag, nonce);
+      expect(decrypted).toStrictEqual(textBuffer);
+    }
+  });
+
+  test('uint8Array()', () => {
     const values = Object.values(AEAD);
 
     for (let i = 0; i < values.length; i++) {

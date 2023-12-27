@@ -24,7 +24,7 @@ describe('Hash', () => {
     ['SM3', 'ECAA7923E43DA835AC2085D1AFE92A499A8FED9A02A0C8622C1EC09DAB5BFDFA'],
   ]);
 
-  test('hex', () => {
+  test('hex()', () => {
     const values = Object.values(HASH);
 
     for (let i = 0; i < values.length; i++) {
@@ -70,7 +70,7 @@ describe('Hash', () => {
     }
   });
 
-  test('base64', () => {
+  test('base64()', () => {
     const values = Object.values(HASH);
 
     for (let i = 0; i < values.length; i++) {
@@ -93,7 +93,7 @@ describe('Hash', () => {
     }
   });
 
-  test('buffer', () => {
+  test('buffer()', () => {
     const values = Object.values(HASH);
 
     for (let i = 0; i < values.length; i++) {
@@ -116,7 +116,7 @@ describe('Hash', () => {
     }
   });
 
-  test('digest', () => {
+  test('digest()', () => {
     const values = Object.values(HASH);
 
     for (let i = 0; i < values.length; i++) {
@@ -139,7 +139,7 @@ describe('Hash', () => {
     }
   });
 
-  test('uint8Array', () => {
+  test('uint8Array()', () => {
     const values = Object.values(HASH);
 
     for (let i = 0; i < values.length; i++) {
@@ -162,7 +162,7 @@ describe('Hash', () => {
     }
   });
 
-  test('example', () => {
+  test('example(basic)', () => {
     const hex = String(map.get('SHA-256'));
 
     const digest = Hash.create('sha256').update(textString).digest('base64url');

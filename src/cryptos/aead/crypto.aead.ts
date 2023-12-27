@@ -63,21 +63,18 @@ export class Aead {
         cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
         });
+      } else if (
+        this.algorithm === 'aes-128-ocb' ||
+        this.algorithm === 'aes-192-ocb' ||
+        this.algorithm === 'aes-256-ocb'
+      ) {
+        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherOCBTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       } else {
-        let authTagLength = this.authTagLength;
-
-        if (!authTagLength) {
-          authTagLength = 16;
-        }
-
-        cipher = crypto.createCipheriv(
-          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
-          this.key,
-          nonce,
-          {
-            authTagLength: authTagLength,
-          }
-        );
+        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       }
 
       if (!inputEncoding) {
@@ -109,21 +106,18 @@ export class Aead {
         cipher = crypto.createCipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
         });
+      } else if (
+        this.algorithm === 'aes-128-ocb' ||
+        this.algorithm === 'aes-192-ocb' ||
+        this.algorithm === 'aes-256-ocb'
+      ) {
+        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherOCBTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       } else {
-        let authTagLength = this.authTagLength;
-
-        if (!authTagLength) {
-          authTagLength = 16;
-        }
-
-        cipher = crypto.createCipheriv(
-          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
-          this.key,
-          nonce,
-          {
-            authTagLength: authTagLength,
-          }
-        );
+        cipher = crypto.createCipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       }
 
       if (this.aad) {
@@ -172,21 +166,18 @@ export class Aead {
         decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
         });
+      } else if (
+        this.algorithm === 'aes-128-ocb' ||
+        this.algorithm === 'aes-192-ocb' ||
+        this.algorithm === 'aes-256-ocb'
+      ) {
+        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherOCBTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       } else {
-        let authTagLength = this.authTagLength;
-
-        if (!authTagLength) {
-          authTagLength = 16;
-        }
-
-        decipher = crypto.createDecipheriv(
-          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
-          this.key,
-          nonce,
-          {
-            authTagLength: authTagLength,
-          }
-        );
+        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       }
 
       if (!inputEncoding) {
@@ -218,21 +209,18 @@ export class Aead {
         decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherGCMTypes, this.key, nonce, {
           authTagLength: this.authTagLength,
         });
+      } else if (
+        this.algorithm === 'aes-128-ocb' ||
+        this.algorithm === 'aes-192-ocb' ||
+        this.algorithm === 'aes-256-ocb'
+      ) {
+        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherOCBTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       } else {
-        let authTagLength = this.authTagLength;
-
-        if (!authTagLength) {
-          authTagLength = 16;
-        }
-
-        decipher = crypto.createDecipheriv(
-          (this.algorithm as crypto.CipherCCMTypes) || (this.algorithm as crypto.CipherOCBTypes),
-          this.key,
-          nonce,
-          {
-            authTagLength: authTagLength,
-          }
-        );
+        decipher = crypto.createDecipheriv(this.algorithm as crypto.CipherCCMTypes, this.key, nonce, {
+          authTagLength: this.authTagLength || 16,
+        });
       }
 
       decipher.setAuthTag(tag);

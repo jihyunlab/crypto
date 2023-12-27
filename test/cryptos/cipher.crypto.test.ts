@@ -16,7 +16,7 @@ describe('Cipher', () => {
   const textString = 'Welcome to JihyunLab.';
   const textBuffer = Buffer.from(textString, 'utf8');
 
-  test('hex', () => {
+  test('hex()', () => {
     const values = Object.values(CIPHER);
 
     for (let i = 0; i < values.length; i++) {
@@ -60,7 +60,7 @@ describe('Cipher', () => {
     }
   });
 
-  test('binary', () => {
+  test('binary()', () => {
     const values = Object.values(CIPHER);
 
     for (let i = 0; i < values.length; i++) {
@@ -104,7 +104,7 @@ describe('Cipher', () => {
     }
   });
 
-  test('base64', () => {
+  test('base64()', () => {
     const values = Object.values(CIPHER);
 
     for (let i = 0; i < values.length; i++) {
@@ -148,7 +148,7 @@ describe('Cipher', () => {
     }
   });
 
-  test('string', () => {
+  test('string()', () => {
     const values = Object.values(CIPHER);
 
     for (let i = 0; i < values.length; i++) {
@@ -210,7 +210,7 @@ describe('Cipher', () => {
     }
   });
 
-  test('buffer', () => {
+  test('buffer()', () => {
     const values = Object.values(CIPHER);
 
     for (let i = 0; i < values.length; i++) {
@@ -268,7 +268,7 @@ describe('Cipher', () => {
     }
   });
 
-  test('uint8Array', () => {
+  test('uint8Array()', () => {
     const values = Object.values(CIPHER);
 
     for (let i = 0; i < values.length; i++) {

@@ -19,7 +19,7 @@ describe('Asymmetric', () => {
     },
   });
 
-  test('privateCipher(RSA)', () => {
+  test('privateCipher(rsa)', () => {
     const privateCipher = Asymmetric.create.privateCipher({
       key: rsaCipherKeypair.privateKey,
       passphrase: passphrase,
@@ -33,7 +33,7 @@ describe('Asymmetric', () => {
     expect(decrypted).toStrictEqual(message);
   });
 
-  test('publicCipher(RSA)', () => {
+  test('publicCipher(rsa)', () => {
     const privateCipher = Asymmetric.create.privateCipher({
       key: rsaCipherKeypair.privateKey,
       passphrase: passphrase,
@@ -229,6 +229,72 @@ describe('Asymmetric', () => {
     const publicKey = Helper.keypair.generate.publicKey({ type: 'spki', format: 'der', key: key });
 
     const verifier = Asymmetric.create.verifier(publicKey);
+    const verify = verifier.verify(message, signature);
+
+    expect(verify).toBe(true);
+  });
+
+  test('signature(rsapss)', () => {
+    const keypair = Helper.keypair.generate.rsapss({
+      modulusLength: 256 * 8,
+      hashAlgorithm: 'sha256',
+    });
+
+    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signature = signer.sign(message);
+
+    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verify = verifier.verify(message, signature);
+
+    expect(verify).toBe(true);
+  });
+
+  test('signature(dsa)', () => {
+    const keypair = Helper.keypair.generate.dsa({
+      modulusLength: 1024,
+      divisorLength: 160,
+    });
+
+    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signature = signer.sign(message);
+
+    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verify = verifier.verify(message, signature);
+
+    expect(verify).toBe(true);
+  });
+
+  test('signature(ec)', () => {
+    const keypair = Helper.keypair.generate.ec({ namedCurve: 'prime256v1' });
+
+    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signature = signer.sign(message);
+
+    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verify = verifier.verify(message, signature);
+
+    expect(verify).toBe(true);
+  });
+
+  test('signature(ed25519)', () => {
+    const keypair = Helper.keypair.generate.ed25519({ namedCurve: 'prime256v1' });
+
+    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signature = signer.sign(message);
+
+    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verify = verifier.verify(message, signature);
+
+    expect(verify).toBe(true);
+  });
+
+  test('signature(ed448)', () => {
+    const keypair = Helper.keypair.generate.ed448({ namedCurve: 'prime256v1' });
+
+    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signature = signer.sign(message);
+
+    const verifier = Asymmetric.create.verifier(keypair.publicKey);
     const verify = verifier.verify(message, signature);
 
     expect(verify).toBe(true);

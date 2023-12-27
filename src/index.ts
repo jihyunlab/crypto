@@ -34,7 +34,12 @@ export const Cipher = {
 };
 
 export const Aead = {
-  create: (aead: AEAD, key: string | Buffer, authTagLength?: 4 | 6 | 8 | 10 | 12 | 14 | 16, aad?: Buffer) => {
+  create: (
+    aead: AEAD,
+    key: string | Buffer,
+    authTagLength: 4 | 6 | 8 | 10 | 12 | 14 | 16 | null = 16,
+    aad?: Buffer
+  ) => {
     return createAead(aead, key, authTagLength, aad);
   },
 };

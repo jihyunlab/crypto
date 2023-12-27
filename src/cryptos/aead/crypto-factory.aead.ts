@@ -16,8 +16,12 @@ export type AEAD = (typeof AEAD)[keyof typeof AEAD];
 export const create = (
   aead: AEAD,
   key: string | Buffer,
-  authTagLength?: 4 | 6 | 8 | 10 | 12 | 14 | 16,
+  authTagLength: 4 | 6 | 8 | 10 | 12 | 14 | 16 | null = 16,
   aad?: Buffer
 ) => {
-  return new Aead(aead, key, authTagLength, aad);
+  if (!authTagLength) {
+    return new Aead(aead, key, undefined, aad);
+  } else {
+    return new Aead(aead, key, authTagLength, aad);
+  }
 };

@@ -27,7 +27,7 @@ describe('Hmac', () => {
     ['SM3', '654dfa01365508b927a23d1b54af88025af2eeac68a025cf996819cf0e47719e'],
   ]);
 
-  test('hex', () => {
+  test('hex()', () => {
     const values = Object.values(HMAC);
 
     for (let i = 0; i < values.length; i++) {
@@ -56,7 +56,7 @@ describe('Hmac', () => {
     }
   });
 
-  test('binary', () => {
+  test('binary()', () => {
     const values = Object.values(HMAC);
 
     for (let i = 0; i < values.length; i++) {
@@ -85,7 +85,7 @@ describe('Hmac', () => {
     }
   });
 
-  test('base64', () => {
+  test('base64()', () => {
     const values = Object.values(HMAC);
 
     for (let i = 0; i < values.length; i++) {
@@ -114,7 +114,7 @@ describe('Hmac', () => {
     }
   });
 
-  test('buffer', () => {
+  test('buffer()', () => {
     const values = Object.values(HMAC);
 
     for (let i = 0; i < values.length; i++) {
@@ -143,7 +143,7 @@ describe('Hmac', () => {
     }
   });
 
-  test('digest', () => {
+  test('digest()', () => {
     const values = Object.values(HMAC);
 
     for (let i = 0; i < values.length; i++) {
@@ -172,7 +172,7 @@ describe('Hmac', () => {
     }
   });
 
-  test('uint8Array', () => {
+  test('uint8Array()', () => {
     const values = Object.values(HMAC);
 
     for (let i = 0; i < values.length; i++) {
@@ -201,7 +201,7 @@ describe('Hmac', () => {
     }
   });
 
-  test('example', () => {
+  test('example(basic)', () => {
     const hex = String(map.get('SHA-256'));
 
     const digest = Hmac.create('sha256', keyString).update(textString).digest('base64url');
