@@ -57,6 +57,8 @@ Hash.create('sha256').update('string').digest('base64url');
 
 ### Usage
 
+You can generate hmac using predefined hmac algorithm types.
+
 ```javascript
 import { Hmac, HMAC } from '@jihyunlab/crypto';
 
