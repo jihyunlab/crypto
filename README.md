@@ -20,8 +20,6 @@ npm i @jihyunlab/crypto
 
 ## Hash
 
-### Usage
-
 You can generate hashes using any of the predefined hash algorithm types.
 
 ```javascript
@@ -55,8 +53,6 @@ Hash.create('sha256').update('string').digest('base64url');
 
 ## HMAC
 
-### Usage
-
 You can generate HMAC using predefined HMAC algorithm types.
 
 ```javascript
@@ -69,8 +65,6 @@ const buffer = Hmac.create(HMAC.SHA256, Buffer.from('key')).update(Buffer.from('
 ## Symmetric-key algorithm
 
 Symmetric-key algorithm is an encryption technique that uses the same key for encryption and decryption.
-
-### Usage
 
 Encryption functions can be implemented using predefined symmetric-key algorithm types and separately provided functions.
 
@@ -127,8 +121,6 @@ const decrypted = Cipher.create('sm4-cbc', key).decrypt.string(encrypted, iv, 'b
 ## Symmetric-key algorithm(AEAD)
 
 AEAD(Authenticated Encryption with Associated Data) is an encryption technology that provides integrity through MAC calculation during encryption.
-
-### Usage
 
 Encryption functions can be implemented using predefined encryption algorithm types and separately provided functions.
 
