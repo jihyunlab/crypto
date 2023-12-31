@@ -1,7 +1,7 @@
 import { Helper } from '../../src/index';
 import * as crypto from 'crypto';
 
-describe('Keypair', () => {
+describe('KeyPair', () => {
   test('export(privateKey)', () => {
     const keyPair = Helper.keyPair.generate.p256();
 
@@ -20,7 +20,7 @@ describe('Keypair', () => {
     expect(exported).toStrictEqual(publicKey.export({ type: 'spki', format: 'der' }));
   });
 
-  test('keyPair(x25519)', () => {
+  test('generate(x25519)', () => {
     const keyPairA = Helper.keyPair.generate.x25519({
       modulusLength: 256 * 8,
       hashAlgorithm: 'sha256',
@@ -44,7 +44,7 @@ describe('Keypair', () => {
     expect(agreeA).toStrictEqual(agreeB);
   });
 
-  test('keyPair(x448)', () => {
+  test('generate(x448)', () => {
     const keyPairA = Helper.keyPair.generate.x448({
       modulusLength: 256 * 8,
       hashAlgorithm: 'sha256',
