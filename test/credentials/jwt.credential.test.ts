@@ -84,7 +84,7 @@ describe('Jwt', () => {
     expect(header).toBe(testHeader);
     expect(payload).toBe(testPayload);
 
-    const privateKey = Helper.keypair.generate.privateKey({
+    const privateKey = Helper.keyPair.generate.privateKey({
       key: {
         kty: 'EC',
         crv: 'P-256',
@@ -95,7 +95,7 @@ describe('Jwt', () => {
       format: 'jwk',
     });
 
-    const publicKey = Helper.keypair.generate.publicKey({
+    const publicKey = Helper.keyPair.generate.publicKey({
       key: {
         kty: 'EC',
         crv: 'P-256',
@@ -140,7 +140,7 @@ describe('Jwt', () => {
     expect(protectedHeader).toBe(testProtectedHeader);
     expect(payload).toBe(testPayload);
 
-    const privateKey = Helper.keypair.generate.privateKey({
+    const privateKey = Helper.keyPair.generate.privateKey({
       key: {
         kty: 'EC',
         crv: 'P-256',
@@ -151,7 +151,7 @@ describe('Jwt', () => {
       format: 'jwk',
     });
 
-    const publicKey = Helper.keypair.generate.publicKey({
+    const publicKey = Helper.keyPair.generate.publicKey({
       key: {
         kty: 'EC',
         crv: 'P-256',

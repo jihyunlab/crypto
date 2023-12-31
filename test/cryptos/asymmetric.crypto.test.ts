@@ -5,7 +5,7 @@ describe('Asymmetric', () => {
   const passphrase = 'passphrase';
   const message = Buffer.from('Welcome to JihyunLab.', 'utf8');
 
-  const rsaCipherKeypair = Helper.keypair.generate.rsa({
+  const rsaCipherKeypair = Helper.keyPair.generate.rsa({
     modulusLength: 4096,
     publicKeyEncoding: {
       type: 'spki',
@@ -51,10 +51,10 @@ describe('Asymmetric', () => {
 
   test('ec presets', () => {
     // p256
-    let keypair = Helper.keypair.generate.p256();
+    let keyPair = Helper.keyPair.generate.p256();
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
-    let verifier = Asymmetric.create.verifier(keypair.publicKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
+    let verifier = Asymmetric.create.verifier(keyPair.publicKey);
 
     let signature = signer.sign(message);
     let verify = verifier.verify(message, signature);
@@ -62,10 +62,10 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
 
     // p384
-    keypair = Helper.keypair.generate.p384();
+    keyPair = Helper.keyPair.generate.p384();
 
-    signer = Asymmetric.create.signer(keypair.privateKey);
-    verifier = Asymmetric.create.verifier(keypair.publicKey);
+    signer = Asymmetric.create.signer(keyPair.privateKey);
+    verifier = Asymmetric.create.verifier(keyPair.publicKey);
 
     signature = signer.sign(message);
     verify = verifier.verify(message, signature);
@@ -73,10 +73,10 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
 
     // brainpoolP256
-    keypair = Helper.keypair.generate.brainpoolP256();
+    keyPair = Helper.keyPair.generate.brainpoolP256();
 
-    signer = Asymmetric.create.signer(keypair.privateKey);
-    verifier = Asymmetric.create.verifier(keypair.publicKey);
+    signer = Asymmetric.create.signer(keyPair.privateKey);
+    verifier = Asymmetric.create.verifier(keyPair.publicKey);
 
     signature = signer.sign(message);
     verify = verifier.verify(message, signature);
@@ -84,10 +84,10 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
 
     // brainpoolP384
-    keypair = Helper.keypair.generate.brainpoolP384();
+    keyPair = Helper.keyPair.generate.brainpoolP384();
 
-    signer = Asymmetric.create.signer(keypair.privateKey);
-    verifier = Asymmetric.create.verifier(keypair.publicKey);
+    signer = Asymmetric.create.signer(keyPair.privateKey);
+    verifier = Asymmetric.create.verifier(keyPair.publicKey);
 
     signature = signer.sign(message);
     verify = verifier.verify(message, signature);
@@ -95,10 +95,10 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
 
     // sm2
-    keypair = Helper.keypair.generate.sm2();
+    keyPair = Helper.keyPair.generate.sm2();
 
-    signer = Asymmetric.create.signer(keypair.privateKey);
-    verifier = Asymmetric.create.verifier(keypair.publicKey);
+    signer = Asymmetric.create.signer(keyPair.privateKey);
+    verifier = Asymmetric.create.verifier(keyPair.publicKey);
 
     signature = signer.sign(message);
     verify = verifier.verify(message, signature);
@@ -106,13 +106,13 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
   });
 
-  test('export keypair(p256)', () => {
-    let keypair = Helper.keypair.generate.p256();
+  test('export keyPair(p256)', () => {
+    let keyPair = Helper.keyPair.generate.p256();
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const exported = keypair.publicKey.export({ type: 'spki', format: 'der' });
+    const exported = keyPair.publicKey.export({ type: 'spki', format: 'der' });
 
     const x = exported.subarray(-64, -32);
     const y = exported.subarray(-32);
@@ -130,7 +130,7 @@ describe('Asymmetric', () => {
     const header = '3059301306072a8648ce3d020106082a8648ce3d030107034200';
     const key = Buffer.from(header + uncompressed, 'hex');
 
-    const publicKey = Helper.keypair.generate.publicKey({ type: 'spki', format: 'der', key: key });
+    const publicKey = Helper.keyPair.generate.publicKey({ type: 'spki', format: 'der', key: key });
 
     const verifier = Asymmetric.create.verifier(publicKey);
     const verify = verifier.verify(message, signature);
@@ -138,13 +138,13 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
   });
 
-  test('export keypair(p384)', () => {
-    let keypair = Helper.keypair.generate.p384();
+  test('export keyPair(p384)', () => {
+    let keyPair = Helper.keyPair.generate.p384();
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const exported = keypair.publicKey.export({ type: 'spki', format: 'der' });
+    const exported = keyPair.publicKey.export({ type: 'spki', format: 'der' });
 
     const x = exported.subarray(-96, -48);
     const y = exported.subarray(-48);
@@ -162,7 +162,7 @@ describe('Asymmetric', () => {
     const header = '3076301006072a8648ce3d020106052b81040022036200';
     const key = Buffer.from(header + uncompressed, 'hex');
 
-    const publicKey = Helper.keypair.generate.publicKey({ type: 'spki', format: 'der', key: key });
+    const publicKey = Helper.keyPair.generate.publicKey({ type: 'spki', format: 'der', key: key });
 
     const verifier = Asymmetric.create.verifier(publicKey);
     const verify = verifier.verify(message, signature);
@@ -170,13 +170,13 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
   });
 
-  test('export keypair(brainpoolP256)', () => {
-    let keypair = Helper.keypair.generate.brainpoolP256();
+  test('export keyPair(brainpoolP256)', () => {
+    let keyPair = Helper.keyPair.generate.brainpoolP256();
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const exported = keypair.publicKey.export({ type: 'spki', format: 'der' });
+    const exported = keyPair.publicKey.export({ type: 'spki', format: 'der' });
 
     const x = exported.subarray(-64, -32);
     const y = exported.subarray(-32);
@@ -194,7 +194,7 @@ describe('Asymmetric', () => {
     const header = '305a301406072a8648ce3d020106092b2403030208010107034200';
     const key = Buffer.from(header + uncompressed, 'hex');
 
-    const publicKey = Helper.keypair.generate.publicKey({ type: 'spki', format: 'der', key: key });
+    const publicKey = Helper.keyPair.generate.publicKey({ type: 'spki', format: 'der', key: key });
 
     const verifier = Asymmetric.create.verifier(publicKey);
     const verify = verifier.verify(message, signature);
@@ -202,13 +202,13 @@ describe('Asymmetric', () => {
     expect(verify).toBe(true);
   });
 
-  test('export keypair(brainpoolP384)', () => {
-    let keypair = Helper.keypair.generate.brainpoolP384();
+  test('export keyPair(brainpoolP384)', () => {
+    let keyPair = Helper.keyPair.generate.brainpoolP384();
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const exported = keypair.publicKey.export({ type: 'spki', format: 'der' });
+    const exported = keyPair.publicKey.export({ type: 'spki', format: 'der' });
 
     const x = exported.subarray(-96, -48);
     const y = exported.subarray(-48);
@@ -226,7 +226,7 @@ describe('Asymmetric', () => {
     const header = '307a301406072a8648ce3d020106092b240303020801010b036200';
     const key = Buffer.from(header + uncompressed, 'hex');
 
-    const publicKey = Helper.keypair.generate.publicKey({ type: 'spki', format: 'der', key: key });
+    const publicKey = Helper.keyPair.generate.publicKey({ type: 'spki', format: 'der', key: key });
 
     const verifier = Asymmetric.create.verifier(publicKey);
     const verify = verifier.verify(message, signature);
@@ -235,66 +235,66 @@ describe('Asymmetric', () => {
   });
 
   test('signature(rsapss)', () => {
-    const keypair = Helper.keypair.generate.rsapss({
+    const keyPair = Helper.keyPair.generate.rsapss({
       modulusLength: 256 * 8,
       hashAlgorithm: 'sha256',
     });
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verifier = Asymmetric.create.verifier(keyPair.publicKey);
     const verify = verifier.verify(message, signature);
 
     expect(verify).toBe(true);
   });
 
   test('signature(dsa)', () => {
-    const keypair = Helper.keypair.generate.dsa({
+    const keyPair = Helper.keyPair.generate.dsa({
       modulusLength: 1024,
       divisorLength: 160,
     });
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verifier = Asymmetric.create.verifier(keyPair.publicKey);
     const verify = verifier.verify(message, signature);
 
     expect(verify).toBe(true);
   });
 
   test('signature(ec)', () => {
-    const keypair = Helper.keypair.generate.ec({ namedCurve: 'prime256v1' });
+    const keyPair = Helper.keyPair.generate.ec({ namedCurve: 'prime256v1' });
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verifier = Asymmetric.create.verifier(keyPair.publicKey);
     const verify = verifier.verify(message, signature);
 
     expect(verify).toBe(true);
   });
 
   test('signature(ed25519)', () => {
-    const keypair = Helper.keypair.generate.ed25519({ namedCurve: 'prime256v1' });
+    const keyPair = Helper.keyPair.generate.ed25519({ namedCurve: 'prime256v1' });
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verifier = Asymmetric.create.verifier(keyPair.publicKey);
     const verify = verifier.verify(message, signature);
 
     expect(verify).toBe(true);
   });
 
   test('signature(ed448)', () => {
-    const keypair = Helper.keypair.generate.ed448({ namedCurve: 'prime256v1' });
+    const keyPair = Helper.keyPair.generate.ed448({ namedCurve: 'prime256v1' });
 
-    let signer = Asymmetric.create.signer(keypair.privateKey);
+    let signer = Asymmetric.create.signer(keyPair.privateKey);
     let signature = signer.sign(message);
 
-    const verifier = Asymmetric.create.verifier(keypair.publicKey);
+    const verifier = Asymmetric.create.verifier(keyPair.publicKey);
     const verify = verifier.verify(message, signature);
 
     expect(verify).toBe(true);

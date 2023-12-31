@@ -73,7 +73,7 @@ export const Asymmetric = {
 export const Helper = {
   cipher: CipherHelper,
   key: KeyHelper,
-  keypair: KeyPairHelper,
+  keyPair: KeyPairHelper,
   iv: IvHelper,
   nonce: NonceHelper,
 };
