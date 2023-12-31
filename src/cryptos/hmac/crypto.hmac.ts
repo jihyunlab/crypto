@@ -28,6 +28,10 @@ export class Hmac {
     return this.digest('base64').toString();
   }
 
+  base64url() {
+    return this.digest('base64url').toString();
+  }
+
   digest(encoding?: crypto.BinaryToTextEncoding) {
     let result: string | Buffer;
 

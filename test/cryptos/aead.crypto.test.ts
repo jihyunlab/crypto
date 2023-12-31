@@ -151,6 +151,50 @@ describe('Aead', () => {
     }
   });
 
+  test('base64url()', () => {
+    const values = Object.values(AEAD);
+
+    for (let i = 0; i < values.length; i++) {
+      const name = values[i];
+
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
+      let aead = Aead.create(name, key);
+      let nonce: string | Buffer;
+
+      nonce = Helper.nonce.generate(name);
+
+      let encrypted = aead.encrypt.base64url(textString, nonce);
+      let decrypted = aead.decrypt.base64url(encrypted.text, encrypted.tag, nonce);
+      expect(decrypted).toBe(textString);
+
+      key = Helper.key.normalize(name, key);
+      aead = Aead.create(name, key);
+
+      decrypted = aead.decrypt.base64url(encrypted.text, encrypted.tag, nonce);
+      expect(decrypted).toBe(textString);
+
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      aead = Aead.create(name, key, authTagLength);
+      nonce = Helper.nonce.normalize(name, nonceString);
+
+      encrypted = aead.encrypt.base64url(textString, nonce);
+      decrypted = aead.decrypt.base64url(encrypted.text, encrypted.tag, nonce);
+      expect(decrypted).toBe(textString);
+
+      key = Helper.key.normalize(name, keyString);
+      aead = Aead.create(name, key, authTagLength, aad);
+      nonce = Helper.nonce.normalize(name, nonceBuffer);
+
+      encrypted = aead.encrypt.base64url(textString, nonce);
+
+      key = Helper.key.normalize(name, keyBuffer);
+      aead = Aead.create(name, key, authTagLength, aad);
+
+      decrypted = aead.decrypt.base64url(encrypted.text, encrypted.tag, nonce);
+      expect(decrypted).toBe(textString);
+    }
+  });
+
   test('string()', () => {
     const values = Object.values(AEAD);
 

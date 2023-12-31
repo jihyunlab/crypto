@@ -93,6 +93,29 @@ describe('Hash', () => {
     }
   });
 
+  test('base64url()', () => {
+    const values = Object.values(HASH);
+
+    for (let i = 0; i < values.length; i++) {
+      const name = values[i];
+      const hex = map.get(name);
+
+      if (!hex) {
+        continue;
+      }
+
+      let hash = Hash.create(name).update(textBuffer);
+      expect(hash.base64url()).toBe(Buffer.from(hex, 'hex').toString('base64url'));
+
+      hash = Hash.create(name).update(textString);
+      expect(hash.base64url()).toBe(Buffer.from(hex, 'hex').toString('base64url'));
+
+      hash = Hash.create(name);
+      expect(hash.update(textBuffer).base64url()).toBe(Buffer.from(hex, 'hex').toString('base64url'));
+      expect(hash.update(textBuffer).base64url()).toBe(Buffer.from(hex, 'hex').toString('base64url'));
+    }
+  });
+
   test('buffer()', () => {
     const values = Object.values(HASH);
 
@@ -174,6 +197,7 @@ describe('Hash', () => {
     expect(Hash.create('sha256').update(textString).binary()).toEqual(Buffer.from(hex, 'hex').toString('binary'));
     expect(Hash.create('sha256').update(textString).hex()).toEqual(Buffer.from(hex, 'hex').toString('hex'));
     expect(Hash.create('sha256').update(textString).base64()).toEqual(Buffer.from(hex, 'hex').toString('base64'));
+    expect(Hash.create('sha256').update(textString).base64url()).toEqual(Buffer.from(hex, 'hex').toString('base64url'));
     expect(Hash.create('sha256').update(textString).buffer()).toEqual(Buffer.from(hex, 'hex'));
     expect(Hash.create('sha256').update(textString).uint8Array()).toStrictEqual(
       new Uint8Array(Buffer.from(hex, 'hex'))

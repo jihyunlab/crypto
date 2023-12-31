@@ -114,6 +114,35 @@ describe('Hmac', () => {
     }
   });
 
+  test('base64url()', () => {
+    const values = Object.values(HMAC);
+
+    for (let i = 0; i < values.length; i++) {
+      const name = values[i];
+      const hex = map.get(name);
+
+      if (!hex) {
+        continue;
+      }
+
+      let hmac = Hmac.create(name, keyString).update(textBuffer);
+      expect(hmac.base64url()).toBe(Buffer.from(hex, 'hex').toString('base64'));
+
+      hmac = Hmac.create(name, keyString).update(textString);
+      expect(hmac.base64url()).toBe(Buffer.from(hex, 'hex').toString('base64'));
+
+      hmac = Hmac.create(name, keyBuffer).update(textBuffer);
+      expect(hmac.base64url()).toBe(Buffer.from(hex, 'hex').toString('base64'));
+
+      hmac = Hmac.create(name, keyBuffer).update(textString);
+      expect(hmac.base64url()).toBe(Buffer.from(hex, 'hex').toString('base64'));
+
+      hmac = Hmac.create(name, keyString);
+      expect(hmac.update(textBuffer).base64url()).toBe(Buffer.from(hex, 'hex').toString('base64'));
+      expect(hmac.update(textBuffer).base64url()).toBe(Buffer.from(hex, 'hex').toString('base64'));
+    }
+  });
+
   test('buffer()', () => {
     const values = Object.values(HMAC);
 
@@ -216,6 +245,9 @@ describe('Hmac', () => {
     expect(Hmac.create('sha256', keyString).update(textString).hex()).toEqual(Buffer.from(hex, 'hex').toString('hex'));
     expect(Hmac.create('sha256', keyString).update(textString).base64()).toEqual(
       Buffer.from(hex, 'hex').toString('base64')
+    );
+    expect(Hmac.create('sha256', keyString).update(textString).base64url()).toEqual(
+      Buffer.from(hex, 'hex').toString('base64url')
     );
     expect(Hmac.create('sha256', keyString).update(textString).buffer()).toEqual(Buffer.from(hex, 'hex'));
     expect(Hmac.create('sha256', keyString).update(textString).uint8Array()).toStrictEqual(

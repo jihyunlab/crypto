@@ -40,6 +40,7 @@ You can use predefined functions to select the type of hash to generate.
 Hash.create(HASH.SHA256).update('string').hex();
 Hash.create(HASH.SHA256).update('string').binary();
 Hash.create(HASH.SHA256).update('string').base64();
+Hash.create(HASH.SHA256).update('string').base64url();
 Hash.create(HASH.SHA256).update('string').buffer();
 Hash.create(HASH.SHA256).update('string').uint8Array();
 ```
@@ -102,6 +103,9 @@ Cipher.create(CIPHER.AES_256_CBC, key).decrypt.binary(encrypted, iv);
 
 Cipher.create(CIPHER.AES_256_CBC, key).encrypt.base64('string', iv);
 Cipher.create(CIPHER.AES_256_CBC, key).decrypt.base64(encrypted, iv);
+
+Cipher.create(CIPHER.AES_256_CBC, key).encrypt.base64url('string', iv);
+Cipher.create(CIPHER.AES_256_CBC, key).decrypt.base64url(encrypted, iv);
 
 Cipher.create(CIPHER.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
 Cipher.create(CIPHER.AES_256_CBC, key).decrypt.buffer(encrypted, iv);

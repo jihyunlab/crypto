@@ -34,6 +34,14 @@ export class Cipher {
       return this.string(text, iv, inputEncoding, 'base64');
     },
 
+    base64url(text: string, iv: string | Buffer | null, inputEncoding?: crypto.Encoding) {
+      if (!inputEncoding) {
+        inputEncoding = 'utf8';
+      }
+
+      return this.string(text, iv, inputEncoding, 'base64url');
+    },
+
     uint8Array(text: Buffer, iv: string | Buffer | null) {
       const buffer = this.buffer(text, iv);
       return new Uint8Array(buffer);
@@ -82,6 +90,10 @@ export class Cipher {
 
     base64(text: string, iv: string | Buffer | null, outputEncoding?: crypto.Encoding) {
       return this.string(text, iv, 'base64', outputEncoding);
+    },
+
+    base64url(text: string, iv: string | Buffer | null, outputEncoding?: crypto.Encoding) {
+      return this.string(text, iv, 'base64url', outputEncoding);
     },
 
     uint8Array(text: Uint8Array, iv: string | Buffer | null) {

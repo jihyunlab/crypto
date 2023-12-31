@@ -148,6 +148,50 @@ describe('Cipher', () => {
     }
   });
 
+  test('base64url()', () => {
+    const values = Object.values(CIPHER);
+
+    for (let i = 0; i < values.length; i++) {
+      const name = values[i];
+
+      let key: string | Buffer = Helper.key.generate(name, passwordString, saltString);
+      let crypto = Cipher.create(name, key);
+      let iv: string | Buffer | null;
+
+      iv = Helper.iv.generate(name);
+
+      let encrypted = crypto.encrypt.base64url(textString, iv);
+      let decrypted = crypto.decrypt.base64url(encrypted, iv);
+      expect(decrypted).toBe(textString);
+
+      key = Helper.key.normalize(name, key);
+      crypto = Cipher.create(name, key);
+
+      decrypted = crypto.decrypt.base64url(encrypted, iv);
+      expect(decrypted).toBe(textString);
+
+      key = Helper.key.generate(name, passwordBuffer, saltBuffer, PBKDF.PBKDF2, 2048, HASH.SHA256);
+      crypto = Cipher.create(name, key);
+      iv = Helper.iv.normalize(name, ivString);
+
+      encrypted = crypto.encrypt.base64url(textString, iv);
+      decrypted = crypto.decrypt.base64url(encrypted, iv);
+      expect(decrypted).toBe(textString);
+
+      key = Helper.key.normalize(name, keyString);
+      crypto = Cipher.create(name, key);
+      iv = Helper.iv.normalize(name, ivBuffer);
+
+      encrypted = crypto.encrypt.base64url(textString, iv);
+
+      key = Helper.key.normalize(name, keyBuffer);
+      crypto = Cipher.create(name, key);
+
+      decrypted = crypto.decrypt.base64url(encrypted, iv);
+      expect(decrypted).toBe(textString);
+    }
+  });
+
   test('string()', () => {
     const values = Object.values(CIPHER);
 

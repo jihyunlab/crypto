@@ -46,6 +46,15 @@ export class Aead {
       return { text: string.text, tag: string.tag };
     },
 
+    base64url(text: string, nonce: string | Buffer, inputEncoding?: crypto.Encoding) {
+      if (!inputEncoding) {
+        inputEncoding = 'utf8';
+      }
+
+      const string = this.string(text, nonce, inputEncoding, 'base64url');
+      return { text: string.text, tag: string.tag };
+    },
+
     uint8Array(text: Buffer, nonce: string | Buffer) {
       const buffer = this.buffer(text, nonce);
       return { text: new Uint8Array(buffer.text), tag: buffer.tag };
@@ -146,6 +155,10 @@ export class Aead {
 
     base64(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
       return this.string(text, tag, nonce, 'base64', outputEncoding);
+    },
+
+    base64url(text: string, tag: Buffer, nonce: string | Buffer, outputEncoding?: crypto.Encoding) {
+      return this.string(text, tag, nonce, 'base64url', outputEncoding);
     },
 
     uint8Array(text: Uint8Array, tag: Buffer, nonce: string | Buffer) {
