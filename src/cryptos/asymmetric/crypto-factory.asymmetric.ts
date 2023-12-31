@@ -4,12 +4,18 @@ import { PrivateCipher } from './private-cipher.asymmetric';
 import { PublicCipher } from './public-cipher.asymmetric';
 import * as crypto from 'crypto';
 
-export const createSigner = (key: crypto.KeyObject) => {
-  return new Signer(key);
+export const createSigner = (
+  key: crypto.KeyLike | crypto.SignKeyObjectInput | crypto.SignPrivateKeyInput,
+  algorithm: string | null | undefined = null
+) => {
+  return new Signer(key, algorithm);
 };
 
-export const createVerifier = (key: crypto.KeyObject) => {
-  return new Verifier(key);
+export const createVerifier = (
+  key: crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.VerifyPublicKeyInput | crypto.VerifyJsonWebKeyInput,
+  algorithm: string | null | undefined = null
+) => {
+  return new Verifier(key, algorithm);
 };
 
 export const createPrivateCipher = (key: crypto.RsaPrivateKey | crypto.KeyLike) => {

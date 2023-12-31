@@ -46,12 +46,18 @@ export const Aead = {
 
 export const Asymmetric = {
   create: {
-    signer: (key: crypto.KeyObject) => {
-      return createSigner(key);
+    signer: (
+      key: crypto.KeyLike | crypto.SignKeyObjectInput | crypto.SignPrivateKeyInput,
+      algorithm: string | null | undefined = null
+    ) => {
+      return createSigner(key, algorithm);
     },
 
-    verifier: (key: crypto.KeyObject) => {
-      return createVerifier(key);
+    verifier: (
+      key: crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.VerifyPublicKeyInput | crypto.VerifyJsonWebKeyInput,
+      algorithm: string | null | undefined = null
+    ) => {
+      return createVerifier(key, algorithm);
     },
 
     privateCipher: (key: crypto.RsaPrivateKey | crypto.KeyLike) => {
