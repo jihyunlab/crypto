@@ -43,9 +43,22 @@ export const Key = {
 
     switch (pbkdf) {
       case PBKDF.PBKDF:
-        return crypto.scryptSync(password, salt, info.keyLength);
+        return this.scrypt(password, salt, info.keyLength);
       case PBKDF.PBKDF2:
-        return crypto.pbkdf2Sync(password, salt, rounds, info.keyLength, hash);
+        return this.pbkdf2(password, salt, rounds, info.keyLength, hash);
     }
+  },
+
+  scrypt(
+    password: crypto.BinaryLike,
+    salt: crypto.BinaryLike,
+    keylen: number,
+    options?: crypto.ScryptOptions | undefined
+  ) {
+    return crypto.scryptSync(password, salt, keylen, options);
+  },
+
+  pbkdf2(password: crypto.BinaryLike, salt: crypto.BinaryLike, iterations: number, keylen: number, digest: string) {
+    return crypto.pbkdf2Sync(password, salt, iterations, keylen, digest);
   },
 };
