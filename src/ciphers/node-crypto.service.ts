@@ -1,4 +1,4 @@
-import { Cipher, Options } from '../interfaces/cipher.interface';
+import { Cipher, CipherOptions } from '../interfaces/cipher.interface';
 import { Key } from '../helpers/key.helper';
 import * as crypto from 'crypto';
 
@@ -30,7 +30,7 @@ export class NodeCryptoCipher implements Cipher {
     ivLength: number,
     tagLength?: number,
     additionalData?: Uint8Array,
-    options?: Options
+    options?: CipherOptions
   ) {
     let salt = '';
     let iterations = 128;

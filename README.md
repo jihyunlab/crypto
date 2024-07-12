@@ -18,9 +18,9 @@ npm i @jihyunlab/crypto
 You can easily encrypt and decrypt data with a simple method.
 
 ```
-import { CIPHER, Cipher } from '@jihyunlab/crypto';
+import { CIPHER, Crypto } from '@jihyunlab/crypto';
 
-const cipher = await Cipher.create(CIPHER.AES_256_GCM, 'your secret key');
+const cipher = await Crypto.createCipher(CIPHER.AES_256_GCM, 'your secret key');
 
 const encrypted = await cipher.encrypt('jihyunlab');
 console.log(encrypted); // 89b1e3c2996e08d5549ecb9d625faca6db785c7d0f9ba51c3985e80ae1143263273308f5eb

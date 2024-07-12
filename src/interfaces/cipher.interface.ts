@@ -9,15 +9,7 @@ export interface Cipher {
   decrypt: (text: string | Uint8Array) => Promise<string | Uint8Array>;
 }
 
-export interface Creator {
-  create: (
-    cipher: CIPHER,
-    password: string,
-    options?: Options
-  ) => Promise<Cipher>;
-}
-
-export interface Options {
+export interface CipherOptions {
   salt?: string;
   iterations?: number;
   ivLength?: number;
