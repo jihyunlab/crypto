@@ -20,23 +20,31 @@ You can easily encrypt and decrypt data with a simple method.
 ```
 import { CIPHER, Crypto } from '@jihyunlab/crypto';
 
-const cipher = await Crypto.createCipher(CIPHER.AES_256_GCM, 'your secret key');
+const cipher = await Crypto.createCipher(
+  CIPHER.AES_256_GCM,
+  'your secret key'
+);
 
 const encrypted = await cipher.encrypt('jihyunlab');
-console.log(encrypted); // 89b1e3c2996e08d5549ecb9d625faca6db785c7d0f9ba51c3985e80ae1143263273308f5eb
+console.log(encrypted); // Uint8Array(37)[51, 174, 20, 84, 12, 141, 173, 206, 249, 11, 59, 112, 88, 223, 163, 211, 128, 234, 102, 116, 16, 224, 175, 45, 46, 52, 186, 141, 15, 243, 9, 120, 64, 27, 135, 169, 65]
 
 const decrypted = await cipher.decrypt(encrypted);
-console.log(decrypted); // jihyunlab
+console.log(decrypted); // Uint8Array(9)[106, 105, 104, 121, 117, 110, 108, 97, 98]
+
+const buffer = Buffer.from(decrypted);
+console.log(buffer.toString()); // jihyunlab
 ```
 
 Provides encryption functionality for Uint8Array data.
 
 ```
-const encrypted = await cipher.encrypt(new Uint8Array([106, 105, 104, 121, 117, 110, 108, 97, 98]));
-console.log(encrypted); // Uint8Array(37) [110, 50, 51, 130, 66, 155, 136, 153, 236, 22, 148, 154, 231, 165, 223, 244, 173, 26, 206, 51, 133, 143, 133, 188, 4, 101, 208, 80, 218, 1, 108, 58, 201, 13, 70, 7, 83]
+const encrypted = await cipher.encrypt(
+  new Uint8Array([106, 105, 104, 121, 117, 110, 108, 97, 98])
+);
+console.log(encrypted); // Uint8Array(37)[185, 95, 254, 103, 109, 250, 109, 50, 8, 218, 251, 74, 215, 108, 74, 86, 177, 82, 144, 154, 156, 120, 128, 169, 112, 236, 153, 23, 253, 164, 238, 159, 236, 17, 85, 26, 75]
 
 const decrypted = await cipher.decrypt(encrypted);
-console.log(decrypted); // Uint8Array(9) [106, 105, 104, 121, 117, 110, 108, 97, 98]
+console.log(decrypted); // Uint8Array(9)[106, 105, 104, 121, 117, 110, 108, 97, 98]
 ```
 
 ## @jihyunlab/web-crypto

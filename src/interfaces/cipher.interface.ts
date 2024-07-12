@@ -5,8 +5,8 @@ export const CIPHER = {
 export type CIPHER = (typeof CIPHER)[keyof typeof CIPHER];
 
 export interface Cipher {
-  encrypt: (text: string | Uint8Array) => Promise<string | Uint8Array>;
-  decrypt: (text: string | Uint8Array) => Promise<string | Uint8Array>;
+  encrypt: (text: string | Uint8Array) => Promise<Uint8Array>;
+  decrypt: (text: string | Uint8Array) => Promise<Uint8Array>;
 }
 
 export interface CipherOptions {

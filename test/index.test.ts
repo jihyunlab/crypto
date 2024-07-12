@@ -12,7 +12,7 @@ describe('Node cipher', () => {
     cipher = await Crypto.createCipher(CIPHER.AES_256_CBC, 'key');
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('value');
+    expect(decrypted).toStrictEqual(new Uint8Array([118, 97, 108, 117, 101]));
   });
 
   test(`Positive: CIPHER.AES_256_CBC - options`, async () => {
@@ -31,7 +31,7 @@ describe('Node cipher', () => {
     });
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('value');
+    expect(decrypted).toStrictEqual(new Uint8Array([118, 97, 108, 117, 101]));
   });
 
   test(`Positive: CIPHER.AES_256_CBC - uint8array`, async () => {
@@ -52,7 +52,7 @@ describe('Node cipher', () => {
     const cipher = await Crypto.createCipher(CIPHER.AES_256_CBC, 'key');
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('value');
+    expect(decrypted).toStrictEqual(new Uint8Array([118, 97, 108, 117, 101]));
   });
 
   test(`Positive: CIPHER.AES_256_CBC - uint8array - from web crypto`, async () => {
@@ -74,7 +74,12 @@ describe('Node cipher', () => {
     const cipher = await Crypto.createCipher(CIPHER.AES_256_CBC, 'key');
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('web-secure-storage');
+    expect(decrypted).toStrictEqual(
+      new Uint8Array([
+        119, 101, 98, 45, 115, 101, 99, 117, 114, 101, 45, 115, 116, 111, 114,
+        97, 103, 101,
+      ])
+    );
   });
 
   test(`Positive: CIPHER.AES_256_GCM`, async () => {
@@ -85,7 +90,7 @@ describe('Node cipher', () => {
     cipher = await Crypto.createCipher(CIPHER.AES_256_GCM, 'key');
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('value');
+    expect(decrypted).toStrictEqual(new Uint8Array([118, 97, 108, 117, 101]));
   });
 
   test(`Positive: CIPHER.AES_256_GCM - options`, async () => {
@@ -105,7 +110,7 @@ describe('Node cipher', () => {
     });
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('value');
+    expect(decrypted).toStrictEqual(new Uint8Array([118, 97, 108, 117, 101]));
   });
 
   test(`Positive: CIPHER.AES_256_GCM - uint8array`, async () => {
@@ -126,7 +131,7 @@ describe('Node cipher', () => {
     const cipher = await Crypto.createCipher(CIPHER.AES_256_GCM, 'key');
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('value');
+    expect(decrypted).toStrictEqual(new Uint8Array([118, 97, 108, 117, 101]));
   });
 
   test(`Positive: CIPHER.AES_256_GCM - uint8array - from web crypto`, async () => {
@@ -148,6 +153,11 @@ describe('Node cipher', () => {
     const cipher = await Crypto.createCipher(CIPHER.AES_256_GCM, 'key');
     const decrypted = await cipher.decrypt(encrypted);
 
-    expect(decrypted).toBe('web-secure-storage');
+    expect(decrypted).toStrictEqual(
+      new Uint8Array([
+        119, 101, 98, 45, 115, 101, 99, 117, 114, 101, 45, 115, 116, 111, 114,
+        97, 103, 101,
+      ])
+    );
   });
 });

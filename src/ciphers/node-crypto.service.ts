@@ -101,11 +101,7 @@ export class NodeCryptoCipher implements Cipher {
       encrypted = Buffer.concat([iv, encrypted, cipher.final()]);
     }
 
-    if (typeof text === 'string') {
-      return encrypted.toString('hex');
-    } else {
-      return new Uint8Array(encrypted);
-    }
+    return new Uint8Array(encrypted);
   }
 
   public async decrypt(text: string | Uint8Array) {
@@ -157,10 +153,6 @@ export class NodeCryptoCipher implements Cipher {
       decrypted = Buffer.concat([decrypted, decipher.final()]);
     }
 
-    if (typeof text === 'string') {
-      return decrypted.toString('utf8');
-    } else {
-      return new Uint8Array(decrypted);
-    }
+    return new Uint8Array(decrypted);
   }
 }
