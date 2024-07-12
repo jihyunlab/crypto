@@ -3,161 +3,47 @@
 [![Version](https://img.shields.io/npm/v/@jihyunlab/crypto.svg?style=flat-square)](https://www.npmjs.com/package/@jihyunlab/crypto?activeTab=versions) [![Downloads](https://img.shields.io/npm/dt/@jihyunlab/crypto.svg?style=flat-square)](https://www.npmjs.com/package/@jihyunlab/crypto) [![Last commit](https://img.shields.io/github/last-commit/jihyunlab/crypto.svg?style=flat-square)](https://github.com/jihyunlab/crypto/graphs/commit-activity) [![License](https://img.shields.io/github/license/jihyunlab/crypto.svg?style=flat-square)](https://github.com/jihyunlab/crypto/blob/master/LICENSE) [![Linter](https://img.shields.io/badge/linter-eslint-blue?style=flat-square)](https://eslint.org) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)\
 [![Build](https://github.com/jihyunlab/crypto/actions/workflows/build.yml/badge.svg)](https://github.com/jihyunlab/crypto/actions/workflows/build.yml) [![Lint](https://github.com/jihyunlab/crypto/actions/workflows/lint.yml/badge.svg)](https://github.com/jihyunlab/crypto/actions/workflows/lint.yml) [![codecov](https://codecov.io/gh/jihyunlab/crypto/graph/badge.svg?token=UW73ZNZY03)](https://codecov.io/gh/jihyunlab/crypto)
 
-@jihyunlab/crypto was developed to increase the convenience of implementing cryptographic functions.\
-@jihyunlab/crypto provides hash, HMAC, and symmetric-key algorithm functions, and functions related to actual encryption use encryption module of Node.js.
+@jihyunlab/crypto was developed to enhance the convenience of implementing cryptographic functionalities in Node.js applications.
 
-For a simpler implementation of text and file encryption, use the [@jihyunlab/secret](https://www.npmjs.com/package/@jihyunlab/secret).
+The encryption function is implemented with [Crypto](https://nodejs.org/api/crypto.html) in Node.js and provides encryption for AES 256 CBC and AES 256 GCM.
 
-## Requirements
-
-Node.js
-
-## Setup
+## Installation
 
 ```bash
 npm i @jihyunlab/crypto
 ```
 
-## Hash
+## Usage
 
-You can generate hashes using any of the predefined hash algorithm types.
+You can easily encrypt and decrypt data with a simple method.
 
-```javascript
-import { Hash, HASH } from '@jihyunlab/crypto';
+```
+import { Cipher, CIPHER } from '@jihyunlab/crypto';
 
-const hex = Hash.create(HASH.SHA256).update('string').hex();
+const cipher = await Cipher.create(CIPHER.AES_256_GCM, 'your secret key');
+
+const encrypted = await cipher.encrypt('jihyunlab');
+console.log(encrypted); // 89b1e3c2996e08d5549ecb9d625faca6db785c7d0f9ba51c3985e80ae1143263273308f5eb
+
+const decrypted = await cipher.decrypt(encrypted);
+console.log(decrypted); // jihyunlab
 ```
 
-You can use a buffer to generate a hash.
+Provides encryption functionality for Uint8Array data.
 
-```javascript
-const hex = Hash.create(HASH.SHA256).update(Buffer.from('string')).hex();
+```
+const encrypted = await cipher.encrypt(new Uint8Array([106, 105, 104, 121, 117, 110, 108, 97, 98]));
+console.log(encrypted); // Uint8Array(37) [110, 50, 51, 130, 66, 155, 136, 153, 236, 22, 148, 154, 231, 165, 223, 244, 173, 26, 206, 51, 133, 143, 133, 188, 4, 101, 208, 80, 218, 1, 108, 58, 201, 13, 70, 7, 83]
+
+const decrypted = await cipher.decrypt(encrypted);
+console.log(decrypted); // Uint8Array(9) [106, 105, 104, 121, 117, 110, 108, 97, 98]
 ```
 
-You can use predefined functions to select the type of hash to generate.
+## @jihyunlab/web-crypto
 
-```javascript
-Hash.create(HASH.SHA256).update('string').hex();
-Hash.create(HASH.SHA256).update('string').binary();
-Hash.create(HASH.SHA256).update('string').base64();
-Hash.create(HASH.SHA256).update('string').base64url();
-Hash.create(HASH.SHA256).update('string').buffer();
-Hash.create(HASH.SHA256).update('string').uint8Array();
-```
+[@jihyunlab/web-crypto](https://www.npmjs.com/package/@jihyunlab/web-crypto) implements encryption functionalities for web applications using the same interface as @jihyunlab/crypto.
 
-If the algorithm you want to use is not defined, you can manually enter the algorithm and hash type to generate.\
-The input algorithm and hash must be types defined in Node.js.
-
-```javascript
-Hash.create('sha256').update('string').digest('base64url');
-```
-
-## HMAC
-
-You can generate HMAC using predefined HMAC algorithm types.
-
-```javascript
-import { Hmac, HMAC } from '@jihyunlab/crypto';
-
-const hex = Hmac.create(HMAC.SHA256, 'key').update('string').hex();
-const buffer = Hmac.create(HMAC.SHA256, Buffer.from('key')).update(Buffer.from('string')).buffer();
-```
-
-## Symmetric-key algorithm
-
-Symmetric-key algorithm is an encryption technique that uses the same key for encryption and decryption.
-
-Encryption functions can be implemented using predefined symmetric-key algorithm types and separately provided functions.
-
-```javascript
-import { Cipher, Helper, CIPHER, PBKDF, HASH } from '@jihyunlab/crypto';
-
-// Generates a key for the encryption algorithm.
-const key = Helper.key.generate(CIPHER.AES_256_CBC, 'password', 'salt');
-
-// Create an IV(Initialization Vector) for encryption.
-const iv = Helper.iv.generate(CIPHER.AES_256_CBC);
-
-const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.hex('string', iv);
-const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.hex(encrypted, iv);
-```
-
-You can implement cryptographic functions using buffers.
-
-```javascript
-const key = Helper.key.generate(CIPHER.AES_256_CBC, Buffer.from('password'), Buffer.from('salt'));
-const iv = Helper.iv.generate(CIPHER.AES_256_CBC);
-
-const encrypted = Cipher.create(CIPHER.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
-const decrypted = Cipher.create(CIPHER.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
-```
-
-You can use predefined functions to select the output type of the encrypted text and the input type of the text to be decrypted.
-
-```javascript
-Cipher.create(CIPHER.AES_256_CBC, key).encrypt.hex('string', iv);
-Cipher.create(CIPHER.AES_256_CBC, key).decrypt.hex(encrypted, iv);
-
-Cipher.create(CIPHER.AES_256_CBC, key).encrypt.binary('string', iv);
-Cipher.create(CIPHER.AES_256_CBC, key).decrypt.binary(encrypted, iv);
-
-Cipher.create(CIPHER.AES_256_CBC, key).encrypt.base64('string', iv);
-Cipher.create(CIPHER.AES_256_CBC, key).decrypt.base64(encrypted, iv);
-
-Cipher.create(CIPHER.AES_256_CBC, key).encrypt.base64url('string', iv);
-Cipher.create(CIPHER.AES_256_CBC, key).decrypt.base64url(encrypted, iv);
-
-Cipher.create(CIPHER.AES_256_CBC, key).encrypt.buffer(Buffer.from('string'), iv);
-Cipher.create(CIPHER.AES_256_CBC, key).decrypt.buffer(encrypted, iv);
-
-Cipher.create(CIPHER.AES_256_CBC, key).encrypt.uint8Array(Buffer.from('string'), iv);
-Cipher.create(CIPHER.AES_256_CBC, key).decrypt.uint8Array(encrypted, iv);
-```
-
-If the algorithm you want to use is not defined, you can enter the algorithm directly and select the input and output types for the text.\
-The input algorithm and input and output text types must be types defined in Node.js.
-
-```javascript
-const encrypted = Cipher.create('sm4-cbc', key).encrypt.string('string', iv, 'utf8', 'base64url');
-const decrypted = Cipher.create('sm4-cbc', key).decrypt.string(encrypted, iv, 'base64url', 'utf8');
-```
-
-## Symmetric-key algorithm(AEAD)
-
-AEAD(Authenticated Encryption with Associated Data) is an encryption technology that provides integrity through MAC calculation during encryption.
-
-Encryption functions can be implemented using predefined encryption algorithm types and separately provided functions.
-
-```javascript
-import { Aead, Helper, AEAD, PBKDF, HASH } from '@jihyunlab/crypto';
-
-// Generates a key for the encryption algorithm.
-const key = Helper.key.generate(AEAD.AES_256_CCM, 'password', 'salt');
-
-// Create an nonce for encryption.
-const nonce = Helper.nonce.generate(AEAD.AES_256_CCM);
-
-const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.hex('string', nonce);
-const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.hex(encrypted.text, encrypted.tag, nonce);
-```
-
-You can implement cryptographic functions using buffers.
-
-```javascript
-const key = Helper.key.generate(AEAD.AES_256_CCM, 'password', 'salt');
-const nonce = Helper.nonce.generate(AEAD.AES_256_CCM);
-
-const encrypted = Aead.create(AEAD.AES_256_CCM, key).encrypt.buffer(Buffer.from('string'), nonce);
-const decrypted = Aead.create(AEAD.AES_256_CCM, key).decrypt.buffer(encrypted.text, encrypted.tag, nonce);
-```
-
-You can use it by directly entering the key, nonce, and IV.\
-The input value can be converted to a value of a size suitable for the algorithm using the normalize function.
-
-```javascript
-const key = Helper.key.normalize(AEAD.AES_256_CCM, Buffer.from('key'));
-const nonce = Helper.nonce.normalize(AEAD.AES_256_CCM, Buffer.from('nonce'));
-```
+Consider using @jihyunlab/web-crypto for decrypting encrypted data from @jihyunlab/crypto in web applications, or vice versa.
 
 ## Credits
 
