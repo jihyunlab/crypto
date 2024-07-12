@@ -1,7 +1,7 @@
 import {
-  Cipher,
   CIPHER,
   Creator,
+  Cipher,
   Options,
 } from '../interfaces/cipher.interface';
 import { NodeCryptoCipher } from './node-crypto.service';
