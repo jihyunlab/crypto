@@ -3,7 +3,7 @@
  */
 import { createCipher } from '../src/index';
 
-describe('Node cipher', () => {
+describe('Crypto', () => {
   test(`Positive: CIPHER.AES_256_CBC`, async () => {
     let cipher = await createCipher('aes-256-cbc', 'key');
 

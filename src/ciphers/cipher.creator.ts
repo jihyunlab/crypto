@@ -1,5 +1,5 @@
 import { CIPHER, Cipher, CipherOptions } from '../interfaces/cipher.interface';
-import { NodeCryptoCipher } from './node-crypto.service';
+import { NodeCryptoCipher } from './node-crypto.cipher';
 
 export const CipherCreator = {
   async create(cipher: CIPHER, password: string, options?: CipherOptions) {
