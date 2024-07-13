@@ -1,6 +1,6 @@
 export const CIPHER = {
-  AES_256_CBC: 'AES-256-CBC',
-  AES_256_GCM: 'AES-256-GCM',
+  AES_256_CBC: 'aes-256-cbc',
+  AES_256_GCM: 'aes-256-gcm',
 } as const;
 export type CIPHER = (typeof CIPHER)[keyof typeof CIPHER];
 
