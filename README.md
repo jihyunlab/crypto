@@ -21,7 +21,7 @@ You can easily encrypt and decrypt data with a simple method.
 import { createCipher } from '@jihyunlab/crypto';
 
 const cipher = await createCipher(
-  'aes-256-gcm', /* 'aes-256-cbc', 'aes-256-gcm' */
+  'aes-256-gcm', /* aes-256-cbc, aes-256-gcm */
   'your secret key'
 );
 
