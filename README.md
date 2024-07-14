@@ -18,12 +18,9 @@ npm i @jihyunlab/crypto
 You can easily encrypt and decrypt data with a simple method.
 
 ```
-import { createCipher } from '@jihyunlab/crypto';
+import { CIPHER, createCipher } from '@jihyunlab/crypto';
 
-const cipher = await createCipher(
-  'aes-256-gcm' /* aes-256-cbc, aes-256-gcm */,
-  'your secret key'
-);
+const cipher = await createCipher(CIPHER.AES_256_GCM, 'your secret key');
 
 const encrypted = await cipher.encrypt('jihyunlab');
 console.log(encrypted); // Uint8Array(37)[51, 174, 20, 84, 12, 141, 173, 206, 249, 11, 59, 112, 88, 223, 163, 211, 128, 234, 102, 116, 16, 224, 175, 45, 46, 52, 186, 141, 15, 243, 9, 120, 64, 27, 135, 169, 65]
@@ -45,6 +42,15 @@ console.log(encrypted); // Uint8Array(37)[185, 95, 254, 103, 109, 250, 109, 50, 
 
 const decrypted = await cipher.decrypt(encrypted);
 console.log(decrypted); // Uint8Array(9)[106, 105, 104, 121, 117, 110, 108, 97, 98]
+```
+
+You can configure encryption options such as salt and iteration.
+
+```
+const cipher = await createCipher(CIPHER.AES_256_GCM, 'your secret key', {
+  salt: 'salt',
+  iterations: 256,
+});
 ```
 
 ## @jihyunlab/web-crypto
