@@ -2,11 +2,11 @@
  * @jest-environment node
  */
 import { NodeCryptoCipher } from '../../src/ciphers/node-crypto.cipher';
-import { Key } from '../../src/helpers/key.helper';
+import { KeyHelper } from '../../src/helpers/key.helper';
 
 describe('Node crypto cipher', () => {
   test(`Negative: encrypt() - key does not exist.`, async () => {
-    const spy = jest.spyOn(Key as any, 'pbkdf2');
+    const spy = jest.spyOn(KeyHelper as any, 'pbkdf2');
     spy.mockImplementation(() => {
       return undefined;
     });
@@ -27,7 +27,7 @@ describe('Node crypto cipher', () => {
   });
 
   test(`Negative: decrypt() - key does not exist.`, async () => {
-    const spy = jest.spyOn(Key as any, 'pbkdf2');
+    const spy = jest.spyOn(KeyHelper as any, 'pbkdf2');
     spy.mockImplementation(() => {
       return undefined;
     });

@@ -1,5 +1,5 @@
 import { Cipher, CipherOptions } from '../interfaces/cipher.interface';
-import { Key } from '../helpers/key.helper';
+import { KeyHelper } from '../helpers/key.helper';
 import * as crypto from 'crypto';
 
 export class NodeCryptoCipher implements Cipher {
@@ -47,7 +47,7 @@ export class NodeCryptoCipher implements Cipher {
       iterations = options.iterations;
     }
 
-    const key = await Key.pbkdf2(length / 8, password, salt, iterations);
+    const key = await KeyHelper.pbkdf2(length / 8, password, salt, iterations);
 
     const instance = new NodeCryptoCipher(
       cipher,
