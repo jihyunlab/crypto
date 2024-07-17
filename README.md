@@ -59,6 +59,13 @@ const cipher = await createCipher(CIPHER.AES_256_GCM, 'your secret key', {
 
 Consider using @jihyunlab/web-crypto for decrypting encrypted data from @jihyunlab/crypto in web applications, or vice versa.
 
+```
+import { CIPHER, createCipher } from '@jihyunlab/web-crypto';
+
+const cipher = await createCipher(CIPHER.AES_256_GCM, 'your secret key');
+const encrypted = await cipher.encrypt('jihyunlab');
+```
+
 ## Credits
 
 Authored and maintained by JihyunLab <<info@jihyunlab.com>>
