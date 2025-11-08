@@ -53,6 +53,19 @@ const cipher = await createCipher(CIPHER.AES_256_GCM, 'your secret key', {
 });
 ```
 
+Provides hashing functionality for Uint8Array data.
+
+```
+import { HASH, createHash } from '@jihyunlab/crypto';
+
+const hash = await createHash(HASH.SHA_256);
+
+const hashed = await hash.digest(
+  new Uint8Array([106, 105, 104, 121, 117, 110, 108, 97, 98])
+);
+console.log(hashed); // Uint8Array(32) [200, 111, 45, 209, 157, 58, 63, 244, 241, 200, 144, 165, 32, 243, 10, 145, 101, 204, 44, 179, 226, 63, 57, 208, 185, 93, 101, 0, 122, 198, 82, 100]
+```
+
 ## @jihyunlab/web-crypto
 
 [@jihyunlab/web-crypto](https://www.npmjs.com/package/@jihyunlab/web-crypto) implements encryption functionalities for web applications using the same interface as @jihyunlab/crypto.

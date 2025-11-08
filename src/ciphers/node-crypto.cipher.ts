@@ -80,9 +80,14 @@ export class NodeCryptoCipher implements Cipher {
     let encrypted: Buffer;
 
     if (this.cipher === 'aes-256-gcm') {
-      const cipher = crypto.createCipheriv(this.cipher, this.key, iv, {
-        authTagLength: this.tagLength,
-      });
+      const cipher = crypto.createCipheriv(
+        this.cipher,
+        new Uint8Array(this.key),
+        new Uint8Array(iv),
+        {
+          authTagLength: this.tagLength,
+        }
+      );
 
       if (this.additionalData !== undefined && this.additionalData !== null) {
         cipher.setAAD(this.additionalData, {
@@ -90,15 +95,28 @@ export class NodeCryptoCipher implements Cipher {
         });
       }
 
-      encrypted = cipher.update(buffer);
+      encrypted = cipher.update(new Uint8Array(buffer));
 
       const final = cipher.final();
-      encrypted = Buffer.concat([iv, encrypted, final, cipher.getAuthTag()]);
+      encrypted = Buffer.concat([
+        new Uint8Array(iv),
+        new Uint8Array(encrypted),
+        new Uint8Array(final),
+        new Uint8Array(cipher.getAuthTag()),
+      ]);
     } else {
-      const cipher = crypto.createCipheriv(this.cipher, this.key, iv);
+      const cipher = crypto.createCipheriv(
+        this.cipher,
+        new Uint8Array(this.key),
+        new Uint8Array(iv)
+      );
 
-      encrypted = cipher.update(buffer);
-      encrypted = Buffer.concat([iv, encrypted, cipher.final()]);
+      encrypted = cipher.update(new Uint8Array(buffer));
+      encrypted = Buffer.concat([
+        new Uint8Array(iv),
+        new Uint8Array(encrypted),
+        new Uint8Array(cipher.final()),
+      ]);
     }
 
     return new Uint8Array(encrypted);
@@ -128,12 +146,17 @@ export class NodeCryptoCipher implements Cipher {
         buffer = buffer.subarray(this.ivLength, buffer.length - this.tagLength);
       }
 
-      const decipher = crypto.createDecipheriv(this.cipher, this.key, iv, {
-        authTagLength: this.tagLength,
-      });
+      const decipher = crypto.createDecipheriv(
+        this.cipher,
+        new Uint8Array(this.key),
+        new Uint8Array(iv),
+        {
+          authTagLength: this.tagLength,
+        }
+      );
 
       if (tag) {
-        decipher.setAuthTag(tag);
+        decipher.setAuthTag(new Uint8Array(tag));
       }
 
       if (this.additionalData !== undefined && this.additionalData !== null) {
@@ -142,15 +165,25 @@ export class NodeCryptoCipher implements Cipher {
         });
       }
 
-      decrypted = decipher.update(buffer);
-      decrypted = Buffer.concat([decrypted, decipher.final()]);
+      decrypted = decipher.update(new Uint8Array(buffer));
+      decrypted = Buffer.concat([
+        new Uint8Array(decrypted),
+        new Uint8Array(decipher.final()),
+      ]);
     } else {
       buffer = buffer.subarray(this.ivLength);
 
-      const decipher = crypto.createDecipheriv(this.cipher, this.key, iv);
+      const decipher = crypto.createDecipheriv(
+        this.cipher,
+        new Uint8Array(this.key),
+        new Uint8Array(iv)
+      );
 
-      decrypted = decipher.update(buffer);
-      decrypted = Buffer.concat([decrypted, decipher.final()]);
+      decrypted = decipher.update(new Uint8Array(buffer));
+      decrypted = Buffer.concat([
+        new Uint8Array(decrypted),
+        new Uint8Array(decipher.final()),
+      ]);
     }
 
     return new Uint8Array(decrypted);
