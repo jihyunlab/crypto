@@ -11,7 +11,7 @@ export const CRYPTO = {
 export type CRYPTO = (typeof CRYPTO)[keyof typeof CRYPTO];
 
 export type ExtendedJsonWebKey = JsonWebKey & {
-  kid: string;
+  kid?: string;
 };
 
 export interface Crypto {
