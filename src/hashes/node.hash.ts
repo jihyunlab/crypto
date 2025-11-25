@@ -1,7 +1,7 @@
 import { Hash } from '../interfaces/hash.interface';
 import * as crypto from 'crypto';
 
-export class NodeCryptoHash implements Hash {
+export class NodeHash implements Hash {
   private readonly hash: string;
 
   private constructor(hash: string) {
@@ -9,7 +9,7 @@ export class NodeCryptoHash implements Hash {
   }
 
   public static async create(cipher: string) {
-    const instance = new NodeCryptoHash(cipher);
+    const instance = new NodeHash(cipher);
 
     return instance;
   }

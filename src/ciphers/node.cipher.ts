@@ -2,7 +2,7 @@ import { Cipher, CipherOptions } from '../interfaces/cipher.interface';
 import { KeyHelper } from '../helpers/key.helper';
 import * as crypto from 'crypto';
 
-export class NodeCryptoCipher implements Cipher {
+export class NodeCipher implements Cipher {
   private readonly cipher: string;
   private readonly ivLength: number;
   private readonly key: Buffer;
@@ -49,7 +49,7 @@ export class NodeCryptoCipher implements Cipher {
 
     const key = await KeyHelper.pbkdf2(length / 8, password, salt, iterations);
 
-    const instance = new NodeCryptoCipher(
+    const instance = new NodeCipher(
       cipher,
       key,
       ivLength,
@@ -85,7 +85,7 @@ export class NodeCryptoCipher implements Cipher {
         new Uint8Array(this.key),
         new Uint8Array(iv),
         {
-          authTagLength: this.tagLength,
+          authTagLength: this.tagLength || 16,
         }
       );
 
@@ -139,25 +139,21 @@ export class NodeCryptoCipher implements Cipher {
     const iv = buffer.subarray(0, this.ivLength);
 
     if (this.cipher === 'aes-256-gcm') {
-      let tag: Buffer | undefined;
+      const tagLength = this.tagLength || 16;
+      const tag = buffer.subarray(buffer.length - tagLength, buffer.length);
 
-      if (this.tagLength !== undefined && this.tagLength !== null) {
-        tag = buffer.subarray(buffer.length - this.tagLength, buffer.length);
-        buffer = buffer.subarray(this.ivLength, buffer.length - this.tagLength);
-      }
+      buffer = buffer.subarray(this.ivLength, buffer.length - tagLength);
 
       const decipher = crypto.createDecipheriv(
         this.cipher,
         new Uint8Array(this.key),
         new Uint8Array(iv),
         {
-          authTagLength: this.tagLength,
+          authTagLength: tagLength,
         }
       );
 
-      if (tag) {
-        decipher.setAuthTag(new Uint8Array(tag));
-      }
+      decipher.setAuthTag(new Uint8Array(tag));
 
       if (this.additionalData !== undefined && this.additionalData !== null) {
         decipher.setAAD(this.additionalData, {

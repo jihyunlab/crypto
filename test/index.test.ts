@@ -1,8 +1,15 @@
 /**
  * @jest-environment node
  */
-import { HASH, createHash } from '../src/index';
-import { CIPHER, createCipher } from '../src/index';
+import {
+  HASH,
+  createHash,
+  CIPHER,
+  createCipher,
+  CRYPTO,
+  createCrypto,
+  JwtHelper,
+} from '../src/index';
 
 describe('Crypto', () => {
   test(`Positive: HASH.SHA_256`, async () => {
@@ -202,5 +209,51 @@ describe('Crypto', () => {
         97, 103, 101,
       ])
     );
+  });
+
+  test(`Positive: CRYPTO.RSA_SHA384`, async () => {
+    let crypto = await createCrypto(CRYPTO.RSA_SHA384);
+
+    const keyPair = await crypto.generateKeyPair();
+    const privateKey = await crypto.createPrivateKeyFromPem(keyPair.privateKey);
+
+    const toBeSigned = await JwtHelper.createToBeSigned(
+      { alg: 'RS384', typ: 'JWT' },
+      { name: 'JihyunLab' }
+    );
+
+    const jwt = await JwtHelper.createJwt(
+      toBeSigned,
+      await crypto.sign(privateKey, toBeSigned)
+    );
+
+    crypto = await createCrypto(CRYPTO.RSA_SHA384, {
+      modulusLength: 4096,
+      use: 'sig',
+    });
+
+    let publicKey = await crypto.createPublicKeyFromPem(keyPair.publicKey);
+
+    const parsed = await JwtHelper.parseJwt(jwt);
+
+    let verified = await crypto.verify(
+      publicKey,
+      parsed.toBeSigned,
+      parsed.signature
+    );
+
+    expect(verified).toBe(true);
+
+    const jwk = await crypto.createJwk('kid', privateKey);
+
+    publicKey = await crypto.createPublicKeyFromJwk(jwk);
+
+    verified = await crypto.verify(
+      publicKey,
+      parsed.toBeSigned,
+      parsed.signature
+    );
+
+    expect(verified).toBe(true);
   });
 });

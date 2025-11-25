@@ -1,5 +1,5 @@
 import { CIPHER, Cipher, CipherOptions } from '../interfaces/cipher.interface';
-import { NodeCryptoCipher } from './node-crypto.cipher';
+import { NodeCipher } from './node.cipher';
 
 export const CipherCreator = {
   async create(cipher: CIPHER, password: string, options?: CipherOptions) {
@@ -21,12 +21,12 @@ export const CipherCreator = {
       options.tagLength !== undefined &&
       options.tagLength !== null
     ) {
-      tagLength = options.tagLength;
+      tagLength = options.tagLength / 8;
     }
 
     switch (cipher) {
       case CIPHER.AES_256_CBC:
-        instance = await NodeCryptoCipher.create(
+        instance = await NodeCipher.create(
           'aes-256-cbc',
           256,
           password,
@@ -37,12 +37,12 @@ export const CipherCreator = {
         );
         break;
       case CIPHER.AES_256_GCM:
-        instance = await NodeCryptoCipher.create(
+        instance = await NodeCipher.create(
           'aes-256-gcm',
           256,
           password,
           ivLength || 12,
-          tagLength ? tagLength / 8 : 128 / 8,
+          tagLength,
           options?.additionalData,
           options
         );
